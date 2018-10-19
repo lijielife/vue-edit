@@ -1,0 +1,323 @@
+1、echarts（地图、散点图、饼图、柱状图）
+
+2、数据接口的调用及数据处理和展示
+
+var convertData = function (datass) {
+	var res = []
+	for (var i = 0; i < datass.length; i++) {
+		var geoCoord = geoCoordMap[datass[i].name];
+		if (geoCoord) {
+			res.push({
+				id:datass[i].id,
+				name: datass[i].name,
+				address: geoCoord.concat(datass[i].address),
+				phone: geoCoord.concat(datass[i].phone),
+				pername: geoCoord.concat(datass[i].pername),
+				value: geoCoord.concat(datass[i].time)
+			})
+		}
+	}
+	return res
+}
+
+3、display:flex的兼容性（ie9及以下是不支持的）
+
+注意，设为 Flex 布局以后，子元素的float、clear和vertical-align属性将失效。
+
+flex-direction属性 ｛row | row-reverse | column | column-reverse｝决定主轴的方向
+
+flex-wrap属性 {nowrap-不换行 | wrap-换行第一行在上方 | wrap-reverse-换行第一行在下方} 
+	默认情况下在一条线上排列，如果排不下，如何换行（默认不换行）
+
+flex-flow属性是flex-direction属性和flex-wrap属性的简写形式，默认值为row nowrap
+
+justify-content属性定义在主轴上的对齐方式
+	{flex-start | flex-end | center | space-between | space-around}
+	flex-start-默认左对齐
+	flex-end-右对齐
+	center-居中
+	space-between-两端对齐，项目之间的间隔都相等
+	space-around-每个项目两侧的间隔相等，所以项目之间的间隔比项目与边框的间隔大一倍
+
+align-items属性定义在交叉轴上如何对齐 ｛flex-start | flex-end | center | baseline | stretch｝
+	flex-start-交叉轴的起点对齐
+	flex-end-交叉轴的终点对齐
+	center-交叉轴的中点对齐
+	baseline-项目的第一行文字的基线对齐
+	stretch-默认值，如果项目未设置高度或设为auto，将占满整个容器的高度
+
+align-content属性定义多根轴线（多行）的对齐方式，如果项目只有一根轴线，该属性不起作用
+	{flex-start | flex-end | center | space-between | space-around | stretch}
+
+子元素属性
+order属性，数值越小排列越靠前
+flex-grow属性定义项目的放大比例，默认为0，即如果存在剩余空间也不放大
+flex-shrink属性定义项目的缩小比例，默认为1，即如果空间不足，该项目将缩小
+flex-basis属性定义在分配多余空间之前，项目占据的主轴空间，默认值为auto
+flex属性是flex-grow，flex-shrink，flex-basis的简写默认值为0 1 auto，后两个属性可选
+	该属性有两个快捷值：auto（1 1 auto） 和 none（0 0 auto）
+align-self属性允许单个项目有与其他项目不一样的对齐方式，可覆盖align-items属性，默认值为auto，表示继承父元素的
+	align-items属性，如果没有父元素则等同于stretch
+
+
+
+4、弹层实现（阻止事件的冒泡）
+.Overflow{overflow: hidden;}
+
+// 遮层关闭事件
+$('.closeBtn').click(function () {
+	$('.fixedZC').fadeOut(0)
+	$('body').removeClass('Overflow')
+})
+// 扩大点击范围执行关闭遮层
+$('.hideC').click(function (e) {
+	$('.fixedZC').fadeOut(0)
+	$('body').removeClass('Overflow')
+})
+// tablebox在hideC标签内
+$('.tablebox').click(function (e) {
+	e = window.event || e;
+	if (document.all) {  //只有ie识别
+		e.cancelBubble = true
+	} else {
+		e.stopPropagation()
+	}
+	// event.stopPropagation() //stopPropagation()在ie10及以下不支持，定义是不再派发事件
+	// cancelBubble 检测是否接受上层元素的事件的控制
+	// true 不被上层元素的事件控制。 false 允许被上层元素的事件控制。这是默认值
+	// e.cancelBubble = true
+})
+
+5、ajax数据请求
+
+$.ajax({
+	async: false,
+	type: 'get',
+	url: 'http://',
+	dataType: 'jsonp',
+	success: function (res) {
+		if (res != null) {
+			alert('请求执行成功!')
+		} else {
+			return
+		}
+	},
+	error: function (err) {
+		alert('网络错误!')
+	}
+})
+
+6、字符串截取：
+
+截取前两个字符
+slice(0, 2)
+
+
+7、数组排序
+<script>
+	// 从大到小
+    	function maxSort () {
+    		var arr = [10, 90, 20, 40, 80, 30, 200]
+		var max
+		for (var i = 0; i < arr.length; i++) {
+			for (var j = i; j < arr.length; j++) {
+				if (arr[i] < arr[j]) {
+					max = arr[j]
+					arr[j] = arr[i]
+					arr[i] = max
+				}
+			}
+		}
+		console.log(arr,'max')
+    	}
+	// 从小到大
+	function minSort () {
+    		var arr = [10, 90, 20, 40, 80, 30, 200]
+		var min
+		for (var i = 0; i < arr.length; i++) {
+			for (var j = i; j < arr.length; j++) {
+				if (arr[i] > arr[j]) {
+					min = arr[j]
+					arr[j] = arr[i]
+					arr[i] = min
+				}
+			}
+		}
+		console.log(arr,'min')
+    	}
+    	maxSort ()
+	minSort ()
+</script>
+
+
+8、concat() 方法用于连接两个或多个数组。
+该方法不会改变现有的数组，而仅仅会返回被连接数组的一个副本。
+
+
+9、没有登陆QQ的截图快捷键：
+
+ctrl + shift + x
+
+
+10、文本溢出不换行
+
+overflow: hidden;text-overflow: ellipsis;white-space: nowrap;
+
+
+11、浏览器当前窗口可视区域高度
+
+$(window).height()
+
+12、css 百分比减去像素(滚动条的宽度在17px左右)
+
+width:calc(100% - 18px)  
+
+
+13、四种数组的遍历方式
+
+// 普通的循环遍历方式
+for (var i = 0; i < arr.length; i++) {
+	console.log(arr[i])
+}
+
+// for ..in 遍历方式
+for (var index in arr) {
+	console.log(add[index]) // index数组下标，可自定义
+}
+
+// forEach (函数)
+arr.forEach(function (ele, index) {
+	// 第一个参数为数组元素，第二个参数为数组的下标  ele === arr[index]
+	console.log(arr[index], ele)
+})
+
+// for-of遍历方式
+for(var ele of arr) {
+	// 第一个参数为数组元素
+	console.log(ele)
+}
+
+
+14、jQuery中的四种事件监听方式，分别是bind、live、delegate、on，对应的解除监听的函数分别是unbind、die 、undelegate、off
+
+jQuery官方已宣布在1.7版本开始废弃live
+
+
+15、jquery ajax监听事件
+
+
+var oldComparePeriod = "";
+var newComparePeriod = "";
+$(function(){
+	
+	//将新的期数值放进去
+	newComparePeriod = $('#comparePeriod').combobox('getValue');
+	//启动监听器
+	setInterval("ajaxListener()",5000);//每5秒监听一次
+		
+});
+// 监听器
+function ajaxListener(){
+	newComparePeriod = $('#comparePeriod').combobox('getValue');
+	//期数change时向后台发送请求
+	if(newComparePeriod == oldComparePeriod)
+		return ;
+	oldComparePeriod = newComparePeriod;
+	var data = {comparePeriod:oldComparePeriod};
+	jQuery.ajax({ //发送请求
+    	type: 'post', 
+        url : 'selectComparePeriod.htm',
+  		dataType:'json', 
+        data: data, 
+        success: function(rs){
+            if(rs==null || rs.length==0){
+                	return ;
+            }else{
+		var period = rs[0];
+		var beginNearDate = period.beginNearDate;
+		var beginDate = period.beginDate;
+		var endDate = period.endDate;
+		document.getElementById('beginNearDate').innerText=beginNearDate;
+		document.getElementById('beginDate').innerText=beginDate;
+		document.getElementById('endDate1').innerText=endDate;
+		document.getElementById('endDate2').innerText=endDate;
+		/*
+		$('#beginNearDate').textbox('setValue',beginNearDate);
+		$('#beginDate').textbox('setValue',beginDate);
+		$('#endDate1').textbox('setValue',endDate);
+		$('#endDate2').textbox('setValue',endDate);
+		*/
+		}	
+        },
+    	error:function(){
+    		jQuery.messager.alert('提示', '服务器正忙，请稍后重试。');//异常提示
+    	}
+   });
+}
+
+
+
+16、javascript存储对象(ie支持8及以上)
+
+web存储API提供了sessionStorage(会话存储)和localStorage(本地存储)两个存储对象来对网页的数据
+进行添加、删除、修改、查询操作
+
+sessionStorage——用于临时保存同一窗口（或标签页）的数据，在关闭窗口或标签页之后将会删除这些数据
+
+localStorage——用于长久保存整个网站的数据，保存的数据没有过期时间，直到手动去除
+
+一般会将json存入localStorage中，但是在localStorage会自动将localStorage转换成为字符串形式，
+这个时候会使用JSON.stringify()这个方法，将JSON转换成为JSON字符串,读取之后将JSON字符串转换为
+JSON对象，使用JSON,parse()方法：
+
+if(!window.localStorage) {
+	alert("浏览器不支持localStorage")
+}else {
+	var storage = window.localStorage
+	var data = {
+		name: 'tom',
+		sex: 'man',
+		hobby: 'program'
+	}
+	var d = JSON.stringify(data)
+	storage.setItem("data", d)
+	// 将JSON字符串转换为JSON对象输出
+	var json = storage.getItem("data")
+	var jsonObj = JSON.parse(json)
+	console.log(storage.data)
+	console.log(typeof jsonObj)
+}
+
+
+存储对象属性
+
+length——返回存储对象中包含多少条数据
+
+存储对象方法
+
+key（n）——返回存储对象中第n个键的名称
+getItem——返回指定键的值
+setItem——添加键和值，如果对应的值存在，则更新该键对应的值
+removeItem——移除键
+clear()——清楚存储对象中所有的键
+
+if(typeof(Storage)!=="undefined"){
+	// 是的! 支持 localStorage  sessionStorage 对象!
+	// 一些代码.....
+} else {
+	// 抱歉! 不支持 web 存储。
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
