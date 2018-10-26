@@ -17,7 +17,8 @@
       color: val.color,
       textAlign: val.textAlign,
       wordWrap: 'break-word',
-      fontWeight: val.fontWeight ? 'bold': 'normal'
+      fontWeight: val.fontWeight ? 'bold': 'normal',
+      transform: 'rotate(' + val.rotate + 'deg)'
     }">
   </div>
 </template>
@@ -63,8 +64,8 @@ export default {
     isChild: true,
     dragable: true,
     resizable: true,
-    width: 300,
-    height: 100,
+    width: 150,
+    height: 60,
     left: 50,
     top: 0,
     z: 0,
@@ -76,7 +77,8 @@ export default {
     text: '文本',
     href: '',
     belong: 'page',
-    animationName: ''
+    animationName: '',
+    rotate: 0
   },
   // 属性含义参照 widgets/pic/index.vue
   props: ['val', 'h', 'w', 'playState', 'defaultWidthRate', 'defaultHeightRate', 'editable'],

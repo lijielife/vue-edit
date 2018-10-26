@@ -40,8 +40,16 @@ export default {
     target.top = top > 0 ? top : 0
   },
 
+  // 旋转元件
+  rotate (state, payload) {
+    var target = state.activeElement
+    target.rotate += 90
+    // console.log(target.rotate)
+  },
+
   // 调整元件尺寸
   resize (state, payload) {
+    // console.log(111)
     var dx = payload.x - state.startX
     var dy = payload.y - state.startY
     var value

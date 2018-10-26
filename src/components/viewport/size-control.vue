@@ -43,6 +43,16 @@
 	    }">
 	    <div class="square"></div>
 	  </div>
+
+    <!-- 右下角 -->
+    <div class="rotateBox"
+      @mousedown="handlemouseClick($event, 'right', 'width')"
+      :style="{
+        top: elm.top + elm.height - 10 + 'px',
+        left: (elm.left + elm.width) / defaultW * 100 + '%'
+      }">
+      <div class="rotate iconfont" @click="handleClick">&#xe657;</div>
+    </div>
 	</div>
 </template>
 
@@ -66,6 +76,21 @@ export default {
   },
 
   methods: {
+    handlemouseClick (e, type, originX, originY) {
+      e.stopPropagation()
+      this.type = type
+    },
+
+    handleClick (e) {
+      e.stopPropagation()
+      e.preventDefault()
+      this.$store.commit('rotate', {
+        x: e.pageX,
+        y: e.pageY,
+        type: this.type
+      })
+    },
+
     handlemousedown (e, type, originX, originY) {
       e.stopPropagation()
       this.type = type
@@ -83,7 +108,6 @@ export default {
     handlemousemove (e) {
       e.stopPropagation()
       e.preventDefault()
-
       this.$store.commit('resize', {
         x: e.pageX,
         y: e.pageY,
@@ -123,5 +147,17 @@ export default {
   border: 1px solid #2196f3;
   background-color: #fff;
   flex-shrink: 0;
+}
+.rotateBox{
+  position: absolute;
+  z-index: 1000;
+  display: flex;
+  justify-content: right;
+  align-items: right;
+}
+.rotate{
+  flex-shrink: 0;
+  cursor: pointer;
+  color: #2196f3;
 }
 </style>

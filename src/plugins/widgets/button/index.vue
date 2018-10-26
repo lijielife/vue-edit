@@ -13,7 +13,8 @@
       zIndex: val.z,
       backgroundColor: val.bgColor,
       backgroundImage: 'url(' + val.backPic + ')',
-      color: val.color
+      color: val.color,
+      transform: 'rotate(' + val.rotate + 'deg)'
     }"></button>
 </template>
 
@@ -62,7 +63,8 @@ export default {
     color: '#ffffff',
     text: '按钮',
     belong: 'page',
-    animationName: ''
+    animationName: '',
+    rotate: 0
   },
   props: ['w', 'h', 'val', 'playState', 'defaultWidthRate', 'defaultHeightRate'],
   methods: {

@@ -99,3 +99,9 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+  select{
+    line-height: 1.5 !important;
+  }
+</style>

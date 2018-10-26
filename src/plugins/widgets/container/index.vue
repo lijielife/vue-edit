@@ -18,7 +18,8 @@
       borderWidth: val.borderWidth + 'px',
       flexDirection: val.dir,
       justifyContent: val.justify,
-      alignItems: val.align
+      alignItems: val.align,
+      transform: 'rotate(' + val.rotate + 'deg)'
     }">
 
     <!-- 子组件 -->
@@ -60,7 +61,8 @@ export default {
     justify: 'flex-start',
     align: 'flex-start',
     belong: 'page',
-    animationName: ''
+    animationName: '',
+    rotate: 0
   },
   props: ['h', 'val', 'playState', 'w'],
   created: function () {

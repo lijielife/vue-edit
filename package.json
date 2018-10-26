@@ -15,6 +15,8 @@
   },
   "dependencies": {
     "echarts": "^4.2.0-rc.1",
+    "iview": "^3.1.3",
+    "iview-editor": "^1.1.1",
     "nanoid": "^1.0.1",
     "spectre.css": "^0.5.3",
     "vue": "^2.5.2",
