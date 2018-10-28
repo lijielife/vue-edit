@@ -57,7 +57,7 @@ export default {
     }
   },
   created () {
-    // console.log(this.activeElement)
+    console.log(this.activeElement)
   }
 }
 </script>

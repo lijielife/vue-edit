@@ -11,6 +11,7 @@ export default {
       let widget = state.widgets.find(w => w.uuid === payload.uuid)
       state.activeElement = widget
       state.type = widget.type
+      // console.log(666)
     }
   },
 

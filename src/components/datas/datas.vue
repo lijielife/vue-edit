@@ -14,7 +14,7 @@
 
     <div class="panel-row" flex>
       <div class="textareaText">
-        <i-editor v-model="content" @change="changeDatas"></i-editor>
+        <i-editor v-model="content"></i-editor>
       </div>
     </div>
   </div>
@@ -26,36 +26,7 @@ export default {
   name: 'Datas',
   data () {
     return {
-      content: [
-        {
-          name: 'Mon',
-          value: '100'
-        },
-        {
-          name: 'Tue',
-          value: '30'
-        },
-        {
-          name: 'Wed',
-          value: '80'
-        },
-        {
-          name: 'Thu',
-          value: '20'
-        },
-        {
-          name: 'Fri',
-          value: '60'
-        },
-        {
-          name: 'Sat',
-          value: '40'
-        },
-        {
-          name: 'Sun',
-          value: '90'
-        }
-      ],
+      content: null,
       datax: [],
       datay: []
     }
@@ -63,40 +34,41 @@ export default {
   watch: {
     content (newVal, oldVal) {
       if (newVal !== oldVal) {
-        console.log(newVal, 'new')
-        this.handleDatas()
-        this.changeDatas()
+        setTimeout(() => {
+          this.handleDatas()
+        }, 20)
       }
     }
   },
   methods: {
-    changeDatas () {
-      EventBus.$emit('DatasChange' + this.$store.state.uuid, this.datax, this.datay)
-    },
     handleDatas () {
       let ObjContent = JSON.parse(this.content)
-      // console.log(ObjContent)
-      // this.$store.state.datasX = []
-      // this.$store.state.datasY = []
       this.datax = []
       this.datay = []
       for (let i = 0; i < ObjContent.length; i++) {
         this.datax.push(ObjContent[i].name)
         this.datay.push(ObjContent[i].value)
       }
-      console.log(this.datax, this.datay, 33)
+      EventBus.$emit('DatasChange' + this.$store.state.uuid, this.datax, this.datay)
+    },
+    _initDatas () {
+      this.$axios.get('../../../static/datas.json')
+        .then((res) => {
+          // console.log(res.data.content)
+          this.content = res.data.content
+          let StrContent = JSON.stringify(this.content)
+          this.content = StrContent
+          let ObjContent = JSON.parse(this.content)
+          for (let i = 0; i < ObjContent.length; i++) {
+            this.datax.push(ObjContent[i].name)
+            this.datay.push(ObjContent[i].value)
+          }
+        })
     }
   },
   created () {
-    let StrContent = JSON.stringify(this.content)
-    this.content = StrContent
-    let ObjContent = JSON.parse(this.content)
-
-    for (let i = 0; i < ObjContent.length; i++) {
-      this.$store.state.datasX.push(ObjContent[i].name)
-      this.$store.state.datasY.push(ObjContent[i].value)
-    }
-    console.log(this.$store.state.datasX, 9999, ObjContent)
+    // 数据初始化  当再次选中元件的时候等于是重新加载了页面 对于改变的值又被初始化了
+    this._initDatas()
   }
 }
 </script>

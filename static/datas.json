@@ -1,0 +1,32 @@
+{
+  "content": [
+    {
+      "name": "Mon",
+      "value": "100"
+    },
+    {
+      "name": "Tue",
+      "value": "30"
+    },
+    {
+      "name": "Wed",
+      "value": "80"
+    },
+    {
+      "name": "Thu",
+      "value": "20"
+    },
+    {
+      "name": "Fri",
+      "value": "60"
+    },
+    {
+      "name": "Sat",
+      "value": "40"
+    },
+    {
+      "name": "Sun",
+      "value": "90"
+    }
+  ]
+}

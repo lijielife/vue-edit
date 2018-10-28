@@ -12,8 +12,6 @@ export default {
   startX: 0,              // 鼠标摁下时的横坐标
   startY: 0,              // 鼠标摁下时的纵坐标
   moving: false,          // 是否正在移动元件（参考线仅在移动元件时显示）
-  datasX: [],           // X轴柱状图数据内容
-  datasY: [],           // Y轴柱状图数据内容
 
   animation: [],          // 动画库
   playState: false,       // 动画播放状态

@@ -30,7 +30,7 @@
       </div>
     </div>
     <!-- 全局组件-数据源 -->
-    <datas></datas>
+    <datas :activeElement="activeElement"></datas>
 
   </div>
 </template>

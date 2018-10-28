@@ -60,7 +60,7 @@ export default {
   },
   watch: {
     cwidth () {
-      if (this.cwidth !== 400) {
+      if (this.cwidth !== 500) {
         this._initEchartsBar()
         changeObjResize(myChart)
       }
@@ -80,7 +80,7 @@ export default {
     isChild: true,
     dragable: true,
     resizable: true,
-    width: 400,
+    width: 500,
     height: 200,
     left: 50,
     top: 0,
@@ -97,7 +97,8 @@ export default {
     barColor: '#c23531',
     rotate: 0,
     datasX: [],
-    datasY: []
+    datasY: [],
+    content: null
   },
   // 属性含义参照 widgets/pic/index.vue
   props: ['val', 'h', 'w', 'playState', 'defaultWidthRate', 'defaultHeightRate'],
@@ -155,7 +156,6 @@ export default {
     },
     _EventlinsterDatas () {
       EventBus.$on('DatasChange' + this.val.uuid, (x, y) => {
-        console.log(x, y, 11111111)
         this.val.datasX = x
         this.val.datasY = y
         this._initEchartsBar()
@@ -170,8 +170,8 @@ export default {
     this._EventlinsterDatas()
   },
   created () {
-    this.val.datasX = this.$store.state.datasX
-    this.val.datasY = this.$store.state.datasY
+    // this.val.datasX = this.$store.state.datasX
+    // this.val.datasY = this.$store.state.datasY
   }
 }
 </script>
