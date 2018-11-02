@@ -24,9 +24,10 @@
 import EventBus from '../../utils/EventBus.js'
 export default {
   name: 'Datas',
+  props: ['activeElement'],
   data () {
     return {
-      content: null,
+      content: this.activeElement.content,
       datax: [],
       datay: []
     }
@@ -34,9 +35,7 @@ export default {
   watch: {
     content (newVal, oldVal) {
       if (newVal !== oldVal) {
-        setTimeout(() => {
-          this.handleDatas()
-        }, 20)
+        this.handleDatas()
       }
     }
   },
@@ -49,26 +48,11 @@ export default {
         this.datax.push(ObjContent[i].name)
         this.datay.push(ObjContent[i].value)
       }
-      EventBus.$emit('DatasChange' + this.$store.state.uuid, this.datax, this.datay)
-    },
-    _initDatas () {
-      this.$axios.get('../../../static/datas.json')
-        .then((res) => {
-          // console.log(res.data.content)
-          this.content = res.data.content
-          let StrContent = JSON.stringify(this.content)
-          this.content = StrContent
-          let ObjContent = JSON.parse(this.content)
-          for (let i = 0; i < ObjContent.length; i++) {
-            this.datax.push(ObjContent[i].name)
-            this.datay.push(ObjContent[i].value)
-          }
-        })
+      EventBus.$emit('DatasChange' + this.$store.state.uuid, this.datax, this.datay, this.content)
     }
   },
   created () {
     // 数据初始化  当再次选中元件的时候等于是重新加载了页面 对于改变的值又被初始化了
-    this._initDatas()
   }
 }
 </script>

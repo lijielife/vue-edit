@@ -121,3 +121,13 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+  .panel-preview{
+    line-height: 26px;
+    background-size: 20px 20px;
+  }
+  select{
+    line-height: 1.5 !important;
+  }
+</style>

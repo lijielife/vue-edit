@@ -6,8 +6,9 @@
 
 <script>
 import vuePageDesigner from './dashboard.js'
-
+import store from './store'
 export default {
+  store,
   data () {
     return {
       value: null,
@@ -21,6 +22,16 @@ export default {
     // let data = window.localStorage.getItem('vpd-data')
     // if (data) {
     //   this.value = JSON.parse(data)
+    // }
+  },
+
+  mounted () {
+    // 获取cookie下面的动画存储数据
+    // if (this.getCookie('vpd-data-cookie')) {
+    //   let Animation = JSON.parse(this.getCookie('vpd-data-cookie')).animation
+    //   console.log('动画库：', Animation)
+    //   this.$store.state.animation = Animation
+    //   console.log(this.$store.state.animation, 333)
     // }
   },
 
@@ -46,6 +57,15 @@ export default {
       console.info(cname + '=' + cvalue + '; ' + expires)
       document.cookie = cname + '=' + cvalue + '; ' + expires
       console.info(document.cookie)
+    },
+    getCookie (cname) {
+      var name = cname + '='
+      var ca = document.cookie.split(';')
+      for (var i = 0; i < ca.length; i++) {
+        var c = ca[i].trim()
+        if (c.indexOf(name) === 0) return c.substring(name.length, c.length)
+      }
+      return ''
     }
   },
   components: {

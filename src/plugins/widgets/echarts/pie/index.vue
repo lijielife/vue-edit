@@ -24,25 +24,25 @@
 </template>
 
 <script>
-import braidDoubleBarStyle from './style.vue'
+import braidPieStyle from './style.vue'
 import { changeResize, changeObjResize } from '../../../../utils/offset'
 import EventBus from '../../../../utils/EventBus.js'
 // 引入 ECharts 主模块
 var echarts = require('echarts/lib/echarts')
-// 引入柱状图
-require('echarts/lib/chart/bar')
+// 引入类型图
+require('echarts/lib/chart/pie')
 
-const WIDGET_NAME = 'chart-double-bar'
+const WIDGET_NAME = 'chart-pie'
 
 var id
-var myChartBar
+var myChartMap
 
 export default {
   name: WIDGET_NAME,
   icon:
-    '<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 1000 1000" enable-background="new 0 0 1000 1000" xml:space="preserve"><g><path d="M238.4,472.8c0,0,35.8,0,53.7,0c0.7,155.3,1.4,310.7,2.1,466c-34.8,0-69.7,0-104.5,0c0-155.3,0-310.7,0-466C203.5,472.8,238.4,472.8,238.4,472.8l-10.1-50.1c0,0-59.1,0-88.7,0c0,172,0,344.1,0,516.1c-43.2,0-86.4,0-129.6,0c0,17.4,0,34.8,0,52.2c325.9,0,652,0,977.9,0c0.7-17.4,1.4-34.8,2.1-52.2c-43.2,0-86.4,0-129.6,0c0-309.9,0-619.9,0-929.9C824.2,9,747.5,9,747.5,9l0.2,52.2c0,0,44,0,62.6,0c0,292.5,0,585.1,0,877.6c-34.8,0-69.7,0-104.5,0c0-292.5,0-585.1,0-877.6c13.6,0,41.8-0.1,41.8-0.1l-0.1-52c0,0-62.8-0.1-91.8-0.1c0,309.9,0,619.9,0,929.9c-17.4,0-34.8,0-52.2,0c0-258.4,0-516.8,0-775.2c-36.8,0-110.3,0-110.3,0l5.6,52.2c0,0,35,0,52.5,0c0,241,0,482,0,723c-34.1,0-68.3,0-102.4,0c0-241,0-482,0-723c13.6,0,49.9,0.1,49.9,0.1l-5.7-52.5c0,0-67.5,0.1-96.4,0.1c0,258.4,0,516.8,0,775.2c-17.4,0-34.8,0-52.2,0c0-172,0-344.1,0-516.1c-36,0-116.1,0-116.1,0L238.4,472.8z"/></g></svg>',
-  title: '双柱状图',
-  panel: braidDoubleBarStyle,
+    '<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 1000 1000" enable-background="new 0 0 1000 1000" xml:space="preserve"><g><path d="M500,990c270.2,0,490-219.8,490-490c0-5.3-2.3-10.4-6.2-14c-4-3.6-9.3-5.3-14.5-4.8l-420.1,42.6c-10.3,1.1-17.9,10.3-16.8,20.7c1.1,10.4,10.2,17.9,20.7,16.8l398.8-40.5c-11,239.8-209.4,431.4-451.8,431.4C250.6,952.3,47.7,749.4,47.7,500c0-243.1,192.8-442,433.5-451.9V500c0,10.4,8.4,18.8,18.8,18.8c10.4,0,18.8-8.4,18.8-18.8V28.8c0-10.4-8.4-18.8-18.8-18.8C229.8,10,10,229.8,10,500C10,770.2,229.8,990,500,990z"/><path d="M583.3,17c-5.5-0.9-11.1,0.6-15.3,4.2c-4.3,3.6-6.7,8.9-6.7,14.4v429.8c0,5.4,2.3,10.5,6.3,14c3.5,3.1,8,4.8,12.6,4.8c0.7,0,1.4,0,2.1-0.1c387.3-42.4,390.5-46.7,396.9-55.1c3.1-4.2,4.4-9.6,3.5-14.7C946.8,211.5,786.3,51.8,583.3,17z M598.9,444.4V58.5c171,38.2,305.6,173.2,343,344.7C889.1,411.5,719,431.2,598.9,444.4z"/></g></svg>',
+  title: '饼图',
+  panel: braidPieStyle,
   computed: {
     ctop () {
       return this.val.belong === 'page' ? (this.val.top * this.defaultHeightRate) / this.h * 100 + '%' : '0'
@@ -63,15 +63,15 @@ export default {
   watch: {
     cwidth () {
       // console.log(this.cwidth)
-      if (this.cwidth !== 400) {
+      if (this.cwidth !== 600) {
         this._initEcharts()
-        changeObjResize(myChartBar)
+        changeObjResize(myChartMap)
       }
     },
     cminHeight () {
-      if (this.cminHeight !== 200) {
+      if (this.cminHeight !== 400) {
         this._initEcharts()
-        changeObjResize(myChartBar)
+        changeObjResize(myChartMap)
       }
     }
   },
@@ -83,8 +83,8 @@ export default {
     isChild: true,
     dragable: true,
     resizable: true,
-    width: 400,
-    height: 200,
+    width: 600,
+    height: 400,
     left: 50,
     top: 0,
     z: 0,
@@ -119,61 +119,48 @@ export default {
     // ECharts图表 创建方法
     _initEcharts () {
       id = WIDGET_NAME + this.val.uuid
-      myChartBar = echarts.init(document.getElementById(id))
-      // myChartBar.clear()
-      myChartBar.setOption({
+      myChartMap = echarts.init(document.getElementById(id))
+      // myChartMap.clear()
+      myChartMap.setOption({
         title: {
-          text: 'iphone销量',
-          left: 'center'
+          text: '某站点用户访问来源',
+          subtext: '纯属虚构',
+          x: 'center'
         },
-        barWidth: this.val.graphWidth,
-        barGap: '0',
-        color: this.val.colorArr,
-        grid: {
-          left: '1%',
-          top: '15%',
-          bottom: '1%',
-          right: '1%',
-          containLabel: true,
-          backgroundColor: '#ccc'
+        tooltip: {
+          trigger: 'item',
+          formatter: '{a} <br/>{b} : {c} ({d}%)'
         },
         legend: {
-          left: 'right',
-          data: ['A', 'B']
-        },
-        xAxis: {
-          type: 'category',
-          axisTick: {
-            show: false
-          },
-          data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
-        },
-        yAxis: {
-          type: 'value',
-          // 坐标轴的分割线
-          splitLine: {
-            show: false
-            // lineStyle: {
-            //   // 使用深浅的间隔色
-            //   color: ['#aaa', '#ddd']
-            // }
-          }
+          orient: 'vertical',
+          left: 'left',
+          data: ['直接访问', '邮件营销', '联盟广告', '视频广告', '搜索引擎']
         },
         series: [
           {
-            name: 'A',
-            data: [20, 200, 50, 80, 30, 110, 30],
-            type: 'bar'
-          },
-          {
-            name: 'B',
-            data: [20, 200, 50, 80, 30, 110, 30],
-            type: 'bar'
+            name: '访问来源',
+            type: 'pie',
+            radius: '55%',
+            center: ['50%', '60%'],
+            data: [
+              {value: 335, name: '直接访问'},
+              {value: 310, name: '邮件营销'},
+              {value: 234, name: '联盟广告'},
+              {value: 135, name: '视频广告'},
+              {value: 1548, name: '搜索引擎'}
+            ],
+            itemStyle: {
+              emphasis: {
+                shadowBlur: 10,
+                shadowOffsetX: 0,
+                shadowColor: 'rgba(0, 0, 0, 0.5)'
+              }
+            }
           }
         ]
       })
       // 改变浏览器窗口的时候图形自动缩放适应窗口
-      changeResize(myChartBar)
+      changeResize(myChartMap)
     },
     // 修改柱状条的颜色 $on里面的回调函数使用箭头函数，避免this指向出现问题报错
     _EventListenerC () {
@@ -195,7 +182,6 @@ export default {
     _stopCSSEvent () {
       EventBus.$on('stopCSS' + this.val.uuid, () => {
         this.val.playState = false
-        console.log(22)
       })
     }
   },

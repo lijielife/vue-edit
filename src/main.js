@@ -13,6 +13,7 @@ import 'iview/dist/styles/iview.css'
 import 'iview-editor/dist/iview-editor.css'
 
 import './assets/iconfont.css'
+import 'animate.css'
 
 Vue.component(Datas.name, Datas)
 

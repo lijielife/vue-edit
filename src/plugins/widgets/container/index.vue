@@ -1,7 +1,7 @@
 <template>
   <div
     class="lz-container"
-    :class="[playState ? 'anm-' + val.animationName : '']"
+    :class="[val.playState ? val.animationName : '']"
     :style="{
       display: val.display,
       position: 'absolute',
@@ -28,6 +28,7 @@
 </template>
 
 <script>
+import EventBus from '../../../utils/EventBus.js'
 import braidContainerStyle from './style.vue'
 const WIDGET_NAME = 'braid-container'
 
@@ -62,9 +63,22 @@ export default {
     align: 'flex-start',
     belong: 'page',
     animationName: '',
-    rotate: 0
+    rotate: 0,
+    playState: false
   },
   props: ['h', 'val', 'playState', 'w'],
+  methods: {
+    // 当组件添加了动画的时候点击旋转按钮时候去掉动画class类名，保持旋转事件的css执行
+    _stopCSSEvent () {
+      EventBus.$on('stopCSS' + this.val.uuid, () => {
+        this.val.playState = false
+      })
+    }
+  },
+  mounted () {
+    // 改变组件动画状态为关闭状态
+    this._stopCSSEvent()
+  },
   created: function () {
     console.log('w:' + this.w)
   }

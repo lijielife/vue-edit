@@ -31,6 +31,18 @@
         <input type="color" v-model="activeElement.backgroundColor">
       </div>
     </div>
+
+    <div class="panel-row">
+      <icon name="image" />
+      <div class="panel-label">背景图</div>
+      <div class="panel-value">
+        <div class="panel-preview"
+          @click="addPic"
+          :style="{ backgroundImage: 'url(' + activeElement.backPic + ')' }">
+          <icon name="plus" v-show="!activeElement.backPic" />
+        </div>
+      </div>
+    </div>
 <!--
     <div class="panel-row" flex>
       <icon name="clock" />
@@ -45,6 +57,20 @@
 
 <script>
 export default {
-  props: ['activeElement', 'tab']
+  props: ['activeElement', 'tab'],
+  methods: {
+    addPic () {
+      this.$store.$emit('upload', (payload) => {
+        this.$store.commit('addContainerBackPic', payload)
+      })
+    }
+  }
 }
 </script>
+
+<style scoped>
+  .panel-preview{
+    line-height: 26px;
+    background-size: 20px 20px;
+  }
+</style>

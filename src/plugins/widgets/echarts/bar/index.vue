@@ -1,7 +1,7 @@
 <template>
   <div
-    class="txt"
-    :class="[playState ? 'anm-' + val.animationName : '']"
+    class="txt animated"
+    :class="[val.playState ? val.animationName : '']"
     @blur="(e) => updateText(e, val.uuid)"
     :style="{
       position: val.belong === 'page' ? 'absolute' : 'relative',
@@ -15,7 +15,9 @@
       color: val.color,
       textAlign: val.textAlign,
       display: val.displayNone ? 'block': 'none',
-      transform: 'rotate(' + val.rotate + 'deg)'
+      transform: 'rotate(' + val.rotate + 'deg)',
+      backgroundColor: val.bgColor,
+      backgroundImage: 'url(' + val.backPic + ')'
     }"
     >
   </div>
@@ -33,7 +35,7 @@ require('echarts/lib/chart/bar')
 const WIDGET_NAME = 'chart-bar'
 
 var id
-var myChart
+var myChartBar
 
 export default {
   name: WIDGET_NAME,
@@ -61,14 +63,14 @@ export default {
   watch: {
     cwidth () {
       if (this.cwidth !== 500) {
-        this._initEchartsBar()
-        changeObjResize(myChart)
+        this._initEcharts()
+        changeObjResize(myChartBar)
       }
     },
     cminHeight () {
       if (this.cminHeight !== 200) {
-        this._initEchartsBar()
-        changeObjResize(myChart)
+        this._initEcharts()
+        changeObjResize(myChartBar)
       }
     }
   },
@@ -90,6 +92,9 @@ export default {
     displayNone: true,
     color: '#000000',
     textAlign: 'left',
+    bgColor: '',
+    backPic: '',
+    backPicUrl: '',
     href: '',
     belong: 'page',
     animationName: '',
@@ -98,7 +103,8 @@ export default {
     rotate: 0,
     datasX: [],
     datasY: [],
-    content: null
+    content: null,
+    playState: false
   },
   // 属性含义参照 widgets/pic/index.vue
   props: ['val', 'h', 'w', 'playState', 'defaultWidthRate', 'defaultHeightRate'],
@@ -112,21 +118,30 @@ export default {
       })
     },
     // ECharts图表 创建方法
-    _initEchartsBar (datax, datay) {
+    _initEcharts () {
       id = WIDGET_NAME + this.val.uuid
-      myChart = echarts.init(document.getElementById(id))
-      // myChart.clear()
-      myChart.setOption({
+      myChartBar = echarts.init(document.getElementById(id))
+      // myChartBar.clear()
+      myChartBar.setOption({
+        title: {
+          text: 'iphone销量',
+          left: 'center'
+        },
         barWidth: this.val.graphWidth,
         barGap: '0',
         color: this.val.barColor,
         grid: {
           left: '1%',
-          top: '3%',
-          bottom: '1%',
+          top: '20%',
+          bottom: 0,
           right: '1%',
-          containLabel: true,
-          backgroundColor: '#ccc'
+          containLabel: true
+        },
+        tooltip: {
+          trigger: 'axis',
+          axisPointer: {            // 坐标轴指示器，坐标轴触发有效
+            type: 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+          }
         },
         xAxis: {
           type: 'category',
@@ -136,7 +151,15 @@ export default {
           data: this.val.datasX
         },
         yAxis: {
-          type: 'value'
+          type: 'value',
+          // 坐标轴的分割线
+          splitLine: {
+            show: false
+            // lineStyle: {
+            //   // 使用深浅的间隔色
+            //   color: ['#aaa', '#ddd']
+            // }
+          }
         },
         series: [
           {
@@ -146,32 +169,64 @@ export default {
         ]
       })
       // 改变浏览器窗口的时候图形自动缩放适应窗口
-      changeResize(myChart)
+      changeResize(myChartBar)
     },
-    // 修改柱状条的宽度、数据方法 $on里面的回调函数使用箭头函数，避免this指向出现问题报错
+    // 修改柱状条的宽度、数据方法 $on里面的回调函数使用箭头函数，避免this指向出现问题报错;
     _EventListenerW () {
-      EventBus.$on('change', () => {
-        this._initEchartsBar()
+      EventBus.$on('change' + this.val.uuid, () => {
+        this._initEcharts()
       })
     },
+    // 接收子组件传过来的对应数据进行父组件的赋值
     _EventlinsterDatas () {
-      EventBus.$on('DatasChange' + this.val.uuid, (x, y) => {
+      EventBus.$on('DatasChange' + this.val.uuid, (x, y, all) => {
         this.val.datasX = x
         this.val.datasY = y
-        this._initEchartsBar()
+        this.val.content = all
+        this._initEcharts()
+      })
+    },
+    // 请求默认的数据用以展示
+    _initDatas () {
+      this.$axios.get('../../../../../static/datas.json')
+        .then((res) => {
+          // console.log(res.data.content)
+          this.val.content = res.data.content
+          let StrContent = JSON.stringify(this.val.content)
+          this.val.content = StrContent
+          let ObjContent = JSON.parse(this.val.content)
+          this.val.datasX = []
+          this.val.datasY = []
+          for (let i = 0; i < ObjContent.length; i++) {
+            this.val.datasX.push(ObjContent[i].name)
+            this.val.datasY.push(ObjContent[i].value)
+          }
+          this._initEcharts()
+        })
+    },
+    // 当组件添加了动画的时候点击旋转按钮时候去掉动画class类名，保持旋转事件的css执行
+    _stopCSSEvent () {
+      EventBus.$on('stopCSS' + this.val.uuid, () => {
+        this.val.playState = false
       })
     }
   },
   mounted () {
-    // 初始化柱状图
-    this._initEchartsBar()
     // 修改柱状条的宽度
     this._EventListenerW()
+    // 数据的改变
     this._EventlinsterDatas()
+    // 改变组件动画状态为关闭状态
+    this._stopCSSEvent()
   },
   created () {
-    // this.val.datasX = this.$store.state.datasX
-    // this.val.datasY = this.$store.state.datasY
+    // 默认数据初始化及图形展示
+    this._initDatas()
+  },
+  // 可能会遇到一个坑是$on()会触发多次，具体原因跟生命周期有关,解决办法就是在beforeDestroy或destroy周期中将事件进行销毁，使用$off()
+  beforeDestroy () {
+    EventBus.$on('change')
+    EventBus.$on('DatasChange' + this.val.uuid)
   }
 }
 </script>

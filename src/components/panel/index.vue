@@ -119,4 +119,7 @@ export default {
   background: no-repeat center/100%;
   cursor: pointer;
 }
+select{
+  line-height: 1.5 !important;
+}  
 </style>

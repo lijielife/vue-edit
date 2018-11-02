@@ -1,8 +1,8 @@
 <template>
   <div
-    class="txt"
+    class="txt animated"
     v-html="val.text"
-    :class="[playState ? 'anm-' + val.animationName : '']"
+    :class="[val.playState ? val.animationName : '']"
     :contenteditable="ceditable"
     @blur="(e) => updateText(e, val.uuid)"
     :style="{
@@ -18,12 +18,15 @@
       textAlign: val.textAlign,
       wordWrap: 'break-word',
       fontWeight: val.fontWeight ? 'bold': 'normal',
-      transform: 'rotate(' + val.rotate + 'deg)'
+      transform: 'rotate(' + val.rotate + 'deg)',
+      backgroundColor: val.bgColor,
+      backgroundImage: 'url(' + val.backPic + ')'
     }">
   </div>
 </template>
 
 <script>
+import EventBus from '../../../utils/EventBus.js'
 import braidTxtStyle from './style.vue'
 const WIDGET_NAME = 'braid-txt'
 
@@ -75,10 +78,14 @@ export default {
     color: '#000000',
     textAlign: 'left',
     text: '文本',
+    bgColor: '',
+    backPic: '',
+    backPicUrl: '',
     href: '',
     belong: 'page',
     animationName: '',
-    rotate: 0
+    rotate: 0,
+    playState: false
   },
   // 属性含义参照 widgets/pic/index.vue
   props: ['val', 'h', 'w', 'playState', 'defaultWidthRate', 'defaultHeightRate', 'editable'],
@@ -90,7 +97,17 @@ export default {
         key: 'text',
         value: text
       })
+    },
+    // 当组件添加了动画的时候点击旋转按钮时候去掉动画class类名，保持旋转事件的css执行
+    _stopCSSEvent () {
+      EventBus.$on('stopCSS' + this.val.uuid, () => {
+        this.val.playState = false
+      })
     }
+  },
+  mounted () {
+    // 改变组件动画状态为关闭状态
+    this._stopCSSEvent()
   }
 }
 </script>

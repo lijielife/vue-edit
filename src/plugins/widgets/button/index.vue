@@ -1,7 +1,8 @@
 <template>
   <button
+    class="animated"
     v-html="val.text"
-    :class="[playState ? 'anm-' + val.animationName : '']"
+    :class="[val.playState ? val.animationName : '']"
     contenteditable="true"
     @blur="(e) => updateText(e, val.uuid)"
     :style="{
@@ -20,7 +21,9 @@
 
 <script>
 import braidButtonStyle from './style.vue'
+import EventBus from '../../../utils/EventBus.js'
 const WIDGET_NAME = 'braid-button'
+
 export default {
   name: WIDGET_NAME,
   icon: '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-square"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect></svg>',
@@ -64,7 +67,8 @@ export default {
     text: '按钮',
     belong: 'page',
     animationName: '',
-    rotate: 0
+    rotate: 0,
+    playState: false
   },
   props: ['w', 'h', 'val', 'playState', 'defaultWidthRate', 'defaultHeightRate'],
   methods: {
@@ -75,15 +79,20 @@ export default {
         key: 'text',
         value: text
       })
+    },
+    // 当组件添加了动画的时候点击旋转按钮时候去掉动画class类名，保持旋转事件的css执行
+    _stopCSSEvent () {
+      EventBus.$on('stopCSS' + this.val.uuid, () => {
+        this.val.playState = false
+      })
     }
+  },
+  mounted () {
+    // 改变组件动画状态为关闭状态
+    this._stopCSSEvent()
   }
 }
 </script>
 
 <style scoped>
-.lz-container {
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: 100%;
-}
 </style>

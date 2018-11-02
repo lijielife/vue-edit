@@ -1,12 +1,12 @@
 <template>
   <div class="panel-wrap" v-if="tab === 3">
-    <button class="btn btn-action float-right mx-1">
+    <!-- <button class="btn btn-action float-right mx-1" style="display: none;">
       <icon name="plus" @click="addAnimation" />
     </button>
 
-    <button class="btn btn-action float-right">
+    <button class="btn btn-action float-right" style="display: none;">
       <icon name="play" @click="play" />
-    </button>
+    </button> -->
 
     <div class="panel-row">
       <icon name="film" />
@@ -19,7 +19,7 @@
       </div>
     </div>
 
-    <div v-if="currentAnimation">
+    <div v-if="currentAnimation" style="display: none;">
       <hr>
       <div class="panel-row">
         <icon name="type" />
@@ -116,7 +116,7 @@
 </template>
 
 <script>
-import { getAnimateCss } from '../../utils/css-generate.js'
+// import { getAnimateCss } from '../../utils/css-generate.js'
 export default {
   name: 'panel-animation',
   props: ['activeElement', 'tab'],
@@ -191,38 +191,39 @@ export default {
 
     play () {
       // stop animation if any
-      this.$store.commit('setAnimation', false)
-
+      // this.$store.commit('setAnimation', false)
+      this.activeElement.playState = false
       setTimeout(() => {
         var animations = this.$store.state.animation
         if (animations.length === 0) return
 
-        animations.map(val => {
-          // build style code and insert into document
-          var id = 'anm-' + val.name
-          var styleNode = document.getElementById(id)
+        // animations.map(val => {
+        //   // build style code and insert into document
+        //   var id = val.name
+        //   var styleNode = document.getElementById(id)
 
-          if (styleNode) {
-            styleNode.innerHTML = getAnimateCss(
-              val.name,
-              val,
-              val.keyframes,
-              false
-            )
-          } else {
-            var style = document.createElement('style')
-            style.id = id
-            style.innerHTML = getAnimateCss(
-              val.name,
-              val,
-              val.keyframes,
-              false
-            )
-            document.head.append(style)
-          }
-        })
+        //   if (styleNode) {
+        //     styleNode.innerHTML = getAnimateCss(
+        //       val.name,
+        //       val,
+        //       val.keyframes,
+        //       false
+        //     )
+        //   } else {
+        //     var style = document.createElement('style')
+        //     style.id = id
+        //     style.innerHTML = getAnimateCss(
+        //       val.name,
+        //       val,
+        //       val.keyframes,
+        //       false
+        //     )
+        //     document.head.append(style)
+        //   }
+        // })
 
-        this.$store.commit('setAnimation', true)
+        // this.$store.commit('setAnimation', true)
+        this.activeElement.playState = true
       }, 200)
     }
   },
@@ -232,6 +233,7 @@ export default {
       // 设置选中元件的动画名称
       if (this.activeElement.animationName !== undefined) {
         this.activeElement.animationName = val
+        this.play()
       }
       this.getCurrentAnimation(val)
     },
@@ -244,6 +246,7 @@ export default {
       }
     }
   }
+
 }
 </script>
 

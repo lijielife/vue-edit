@@ -57,11 +57,12 @@
 </template>
 
 <script>
+import EventBus from '../../utils/EventBus.js'
 export default {
   computed: {
     elm () {
       var target = this.$store.state.activeElement
-      if (!target.resizable || target.belong !== 'page') return ''
+      if (!target.resizable || target.belong !== 'page' || target.displayNone === false) return ''
       return target
     },
     defaultW () {
@@ -78,6 +79,7 @@ export default {
   methods: {
     handlemouseClick (e, type, originX, originY) {
       e.stopPropagation()
+      e.preventDefault()
       this.type = type
     },
 
@@ -89,6 +91,7 @@ export default {
         y: e.pageY,
         type: this.type
       })
+      EventBus.$emit('stopCSS' + this.$store.state.uuid)
     },
 
     handlemousedown (e, type, originX, originY) {

@@ -11,7 +11,6 @@ export default {
       let widget = state.widgets.find(w => w.uuid === payload.uuid)
       state.activeElement = widget
       state.type = widget.type
-      // console.log(666)
     }
   },
 
@@ -179,8 +178,8 @@ export default {
   addContainerBackPic (state, payload) {
     state.activeElement.backPic = payload[0].url
     state.activeElement.backPicUrl = payload[0].src
-    state.activeElement.width = payload[0].width
-    state.activeElement.height = payload[0].height
+    // state.activeElement.width = payload[0].width
+    // state.activeElement.height = payload[0].height
   },
 
   // 添加背景图
@@ -190,40 +189,40 @@ export default {
   },
 
   // 添加动画
-  addAnimation (state) {
-    state.animation.push({
-      name: '',
-      duration: 3,
-      delay: 0,
-      iteration: 1,
-      timing: 'linear',
-      direction: 'normal',
-      fill: 'none',
-      keyframes: [
-        {
-          stop: 0,
-          css: ''
-        }
-      ]
-    })
-  },
+  // addAnimation (state) {
+  //   state.animation.push({
+  //     name: '',
+  //     duration: 3,
+  //     delay: 0,
+  //     iteration: 1,
+  //     timing: 'linear',
+  //     direction: 'normal',
+  //     fill: 'none',
+  //     keyframes: [
+  //       {
+  //         stop: 0,
+  //         css: ''
+  //       }
+  //     ]
+  //   })
+  // },
 
-  // 为动画添加 keyframe
-  addkeyframe (state, name) {
-    state.animation.map(val => {
-      if (val.name === name) {
-        val.keyframes.push({
-          stop: 0,
-          css: ''
-        })
-      }
-    })
-  },
+  // // 为动画添加 keyframe
+  // addkeyframe (state, name) {
+  //   state.animation.map(val => {
+  //     if (val.name === name) {
+  //       val.keyframes.push({
+  //         stop: 0,
+  //         css: ''
+  //       })
+  //     }
+  //   })
+  // },
 
-  // 动画的播放与停止
-  setAnimation (state, status) {
-    state.playState = status
-  },
+  // 动画的播放与停止(全局的所有组件动画播放控制，所有弃用!)
+  // setAnimation (state, status) {
+  //   state.playState = status
+  // },
 
   // 更新数据
   updateData (state, {uuid, key, value}) {

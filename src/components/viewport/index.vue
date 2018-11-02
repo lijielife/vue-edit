@@ -4,6 +4,7 @@
       @dblclick="replaceImage"
       :style="{
         backgroundColor: backgroundColor,
+        backgroundImage: 'url(' + this.$store.state.page.backgroundImage + ')',
         height: height + 'px',
         width: width + 'px',
         transform: 'scale(' + zoom / 100 + ')'
@@ -68,7 +69,7 @@ export default {
 
   mixins: [move],
 
-  props: ['zoom'],
+  props: ['val', 'zoom'],
 
   data () {
     return {}
@@ -196,6 +197,9 @@ export default {
     defaultHeightRate () {
       return this.$store.state.defaultHeightRate
     }
+  },
+  created () {
+    console.log(this.$store.state.page.backgroundImage, 88)
   }
 }
 </script>
