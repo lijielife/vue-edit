@@ -38,8 +38,20 @@
       <div class="panel-value">
         <div class="panel-preview"
           @click="addPic"
-          :style="{ backgroundImage: 'url(' + activeElement.backPic + ')' }">
-          <icon name="plus" v-show="!activeElement.backPic" />
+          :style="{ backgroundImage: 'url(' + this.$store.state.page.backgroundImage + ')' }">
+          <icon name="plus" v-show="!this.$store.state.page.backgroundImage" />
+        </div>
+      </div>
+    </div>
+
+    <div class="panel-row">
+      <icon name="delete" />
+      <div class="panel-label">删除背景图</div>
+      <div class="panel-value">
+        <div class="panel-preview"
+          @click="deletePic"
+          :style="{ backgroundImage: 'url(' + this.$store.state.page.backgroundImage + ')' }">
+          <icon name="minus" />
         </div>
       </div>
     </div>
@@ -61,8 +73,11 @@ export default {
   methods: {
     addPic () {
       this.$store.$emit('upload', (payload) => {
-        this.$store.commit('addContainerBackPic', payload)
+        this.$store.commit('addViewportBackPic', payload)
       })
+    },
+    deletePic () {
+      this.$store.commit('deleteViewportBackPic')
     }
   }
 }

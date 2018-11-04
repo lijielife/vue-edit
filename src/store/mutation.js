@@ -174,6 +174,17 @@ export default {
     state.activeElement.url = payload[0].url
   },
 
+  // 添加screen背景图
+  addViewportBackPic (state, payload) {
+    state.page.backPic = payload[0].url
+    state.page.backPicUrl = payload[0].src
+  },
+
+  // 删除screen背景图
+  deleteViewportBackPic (state) {
+    state.page.backPic = ''
+  },
+
   // 添加容器背景图
   addContainerBackPic (state, payload) {
     state.activeElement.backPic = payload[0].url

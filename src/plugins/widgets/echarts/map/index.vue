@@ -41,7 +41,7 @@ export default {
   name: WIDGET_NAME,
   icon:
     '<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 1000 1000" enable-background="new 0 0 1000 1000" xml:space="preserve"><metadata> Svg Vector Icons : http://www.sfont.cn </metadata><g><path d="M11,438.7c-24.8,3.9,428.4,122.4,428.4,122.4l183.6,428.3L990,10.5C990,10.5,35.9,435,11,438.7zM622.6,794.3L499.6,500.9l-275.5-71.8l647.4-290.2C863.4,160.5,622.6,794.3,622.6,794.3z"/></g></svg>',
-  title: '中国地图',
+  title: '地图',
   panel: braidMapStyle,
   computed: {
     ctop () {

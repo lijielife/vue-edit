@@ -5,6 +5,7 @@ export default {
   index: -1,              // 选中元素索引
   uuid: null,             // 选中元素uuid
   counter: 0,             // 容器副本命名时避免重名所用的计数器
+  backgroundImage: '',     // 画布背景图
 
   originX: 0,             // 选中元件的横向初始值
   originY: 0,             // 选中元件的纵向初始值
@@ -63,7 +64,9 @@ export default {
     width: 1000,          // 画布宽度
     endTime: new Date(),   // 截止日期
     backgroundColor: '#fff',
-    backgroundImage: '../../static/ywxtpt_index_pics201810-06.png'
+    backgroundImage: null,
+    backPic: '',
+    backPicUrl: ''
   },
   widgets: []            // 元件
 }

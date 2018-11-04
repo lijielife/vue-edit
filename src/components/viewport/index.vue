@@ -4,7 +4,7 @@
       @dblclick="replaceImage"
       :style="{
         backgroundColor: backgroundColor,
-        backgroundImage: 'url(' + this.$store.state.page.backgroundImage + ')',
+        backgroundImage: 'url(' + this.$store.state.page.backPic + ')',
         height: height + 'px',
         width: width + 'px',
         transform: 'scale(' + zoom / 100 + ')'
@@ -69,7 +69,7 @@ export default {
 
   mixins: [move],
 
-  props: ['val', 'zoom'],
+  props: ['val', 'zoom', 'activeElement'],
 
   data () {
     return {}
@@ -143,7 +143,8 @@ export default {
 
     // 替换图片
     replaceImage (e) {
-      if (this.$store.state.activeElement.isUpload) {
+      if (!this.$store.state.activeElement.isUpload) {
+        console.log(11)
         this.$store.$emit('upload', payload => {
           this.$store.commit('replaceImage', payload)
         })
@@ -199,7 +200,7 @@ export default {
     }
   },
   created () {
-    console.log(this.$store.state.page.backgroundImage, 88)
+    // console.log(this.$store.state.backgroundImage, 88)
   }
 }
 </script>
@@ -231,8 +232,10 @@ export default {
   background-size: 26px 26px;
 }
 .screen {
-  margin: 20px auto;
+  margin: 40px auto;
   transform-origin: center top;
   position: relative;
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
 }
 </style>

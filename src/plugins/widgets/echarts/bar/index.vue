@@ -209,6 +209,14 @@ export default {
       EventBus.$on('stopCSS' + this.val.uuid, () => {
         this.val.playState = false
       })
+    },
+    _changeWidth () {
+      EventBus.$on('changeWidth', (boolean) => {
+        if (boolean) {
+          this._initEcharts()
+          changeObjResize(myChartBar)
+        }
+      })
     }
   },
   mounted () {

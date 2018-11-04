@@ -1,5 +1,6 @@
 <template>
-  <div>
+  <div class="rightDiv" :class="this.flag === false ? '' : 'ChangeWidth'">
+    <div class="btnDiv iconfont" @click="handleClick">&#xe655;</div>
     <ul class="tab tab-block panel-tab">
       <li class="tab-item" :class="{active: activeTab === 1}" @click="activeTab = 1"><a>参数</a></li>
       <li class="tab-item" :class="{active: activeTab === 2}" @click="activeTab = 2"><a>交互</a></li>
@@ -18,6 +19,7 @@ import page from './page.vue'
 import style from './style.vue'
 import event from './event.vue'
 import animation from './animation.vue'
+import EventBus from '../../utils/EventBus.js'
 
 export default {
   components: {
@@ -29,7 +31,8 @@ export default {
 
   data () {
     return {
-      activeTab: 1
+      activeTab: 1,
+      flag: true
     }
   },
 
@@ -39,13 +42,34 @@ export default {
       return this.$store.state.activeElement
     }
   },
-  mounted () {
+  methods: {
+    handleClick () {
+      this.flag = !this.flag
+      EventBus.$emit('changeWidth', this.flag)
+    }
   }
 }
 </script>
 
 <style lang="scss">
 @import '../../_variables.scss';
+.rightDiv {
+  position: relative;
+  transition: all .3s;
+}
+.ChangeWidth {
+  // transform: translate(100%);
+  width: 0 !important;
+}
+.btnDiv {
+  width: 30px;
+  height: 30px;
+  position: absolute;
+  top: 0;
+  left: -50px;
+  cursor: pointer;
+  text-align: center;
+}
 .panel-tab {
   padding: 0;
 }
