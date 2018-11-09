@@ -9,7 +9,7 @@ export default {
 
   originX: 0,             // 选中元件的横向初始值
   originY: 0,             // 选中元件的纵向初始值
-  rotate: 0,              // 选中元件的旋转度
+  // rotate: 0,              // 选中元件的旋转度
   startX: 0,              // 鼠标摁下时的横坐标
   startY: 0,              // 鼠标摁下时的纵坐标
   moving: false,          // 是否正在移动元件（参考线仅在移动元件时显示）
@@ -63,8 +63,8 @@ export default {
     height: 1500,         // 画布高度
     width: 1000,          // 画布宽度
     endTime: new Date(),   // 截止日期
-    backgroundColor: '#fff',
-    backgroundImage: null,
+    backgroundColor: '#ffffff',
+    backgroundImage: '',
     backPic: '',
     backPicUrl: ''
   },

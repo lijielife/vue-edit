@@ -1,7 +1,7 @@
 <template>
   <div class="holder" id="viewport">
-    <div class="screen" 
-      @dblclick="replaceImage"
+    <!-- @dblclick="replaceImage" -->
+    <div class="screen"
       :style="{
         backgroundColor: backgroundColor,
         backgroundImage: 'url(' + this.$store.state.page.backPic + ')',
@@ -142,14 +142,14 @@ export default {
     },
 
     // 替换图片
-    replaceImage (e) {
-      if (!this.$store.state.activeElement.isUpload) {
-        console.log(11)
-        this.$store.$emit('upload', payload => {
-          this.$store.commit('replaceImage', payload)
-        })
-      }
-    },
+    // replaceImage (e) {
+    //   if (!this.$store.state.activeElement.isUpload) {
+    //     // console.log(11)
+    //     this.$store.$emit('upload', payload => {
+    //       this.$store.commit('replaceImage', payload)
+    //     })
+    //   }
+    // },
 
     // 获取子组件
     getChilds (name) {

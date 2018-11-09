@@ -32,7 +32,7 @@ export default {
   data () {
     return {
       activeTab: 1,
-      flag: true
+      flag: false
     }
   },
 
@@ -45,7 +45,7 @@ export default {
   methods: {
     handleClick () {
       this.flag = !this.flag
-      EventBus.$emit('changeWidth', this.flag)
+      EventBus.$emit('changeWidth')
     }
   }
 }

@@ -62,16 +62,12 @@ export default {
   },
   watch: {
     cwidth () {
-      if (this.cwidth !== 500) {
-        this._initEcharts()
-        changeObjResize(myChartBar)
-      }
+      this._initEcharts()
+      changeObjResize(myChartBar)
     },
     cminHeight () {
-      if (this.cminHeight !== 200) {
-        this._initEcharts()
-        changeObjResize(myChartBar)
-      }
+      this._initEcharts()
+      changeObjResize(myChartBar)
     }
   },
   setting: {
@@ -107,7 +103,7 @@ export default {
     playState: false
   },
   // 属性含义参照 widgets/pic/index.vue
-  props: ['val', 'h', 'w', 'playState', 'defaultWidthRate', 'defaultHeightRate'],
+  props: ['val', 'h', 'w', 'defaultWidthRate', 'defaultHeightRate'],
   methods: {
     updateText (e, uuid) {
       let text = e.target.innerHTML
@@ -204,18 +200,23 @@ export default {
           this._initEcharts()
         })
     },
-    // 当组件添加了动画的时候点击旋转按钮时候去掉动画class类名，保持旋转事件的css执行
+    // 当组件添加了动画点击旋转按钮时候去掉动画class类名，保持旋转事件的css执行
     _stopCSSEvent () {
       EventBus.$on('stopCSS' + this.val.uuid, () => {
         this.val.playState = false
+        setTimeout(() => {
+          this._initEcharts()
+          changeObjResize(myChartBar)
+        }, 250)
       })
     },
     _changeWidth () {
-      EventBus.$on('changeWidth', (boolean) => {
-        if (boolean) {
+      EventBus.$on('changeWidth', () => {
+        // 右侧收缩太快需加延时保证图形自适应
+        setTimeout(() => {
           this._initEcharts()
           changeObjResize(myChartBar)
-        }
+        }, 250)
       })
     }
   },
@@ -226,6 +227,8 @@ export default {
     this._EventlinsterDatas()
     // 改变组件动画状态为关闭状态
     this._stopCSSEvent()
+    // 显示隐藏右侧配置菜单
+    this._changeWidth()
   },
   created () {
     // 默认数据初始化及图形展示
@@ -233,8 +236,8 @@ export default {
   },
   // 可能会遇到一个坑是$on()会触发多次，具体原因跟生命周期有关,解决办法就是在beforeDestroy或destroy周期中将事件进行销毁，使用$off()
   beforeDestroy () {
-    EventBus.$on('change')
-    EventBus.$on('DatasChange' + this.val.uuid)
+    EventBus.$off('change')
+    EventBus.$off('DatasChange' + this.val.uuid)
   }
 }
 </script>

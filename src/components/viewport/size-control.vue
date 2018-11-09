@@ -4,6 +4,7 @@
 	  <div class="verti"
 	  	@mousedown="handlemousedown($event, 'left', 'left', 'width')"
 	    :style="{
+        transform: 'rotate(' + this.$store.state.activeElement.rotate + 'deg)',
 	      height: elm.height + 'px',
 	      top: elm.top + 'px',
 	      left: elm.left / defaultW * 100  + '%'
@@ -15,6 +16,7 @@
 	  <div class="verti"
 		  @mousedown="handlemousedown($event, 'right', 'width')"
 	    :style="{
+        transform: 'rotate(' + this.$store.state.activeElement.rotate + 'deg)',
 	      height: elm.height + 'px',
 	      top: elm.top + 'px',
 	      left: (elm.left + elm.width) / defaultW * 100 + '%'
@@ -26,6 +28,7 @@
 	  <div class="horiz"
 		  @mousedown="handlemousedown($event, 'up', 'top', 'height')"
 	    :style="{
+        transform: 'rotate(' + this.$store.state.activeElement.rotate + 'deg)',
 	      width: elm.width / defaultW * 100  + '%',
 	      top: elm.top + 'px',
 	      left: elm.left / defaultW * 100  + '%'
@@ -37,6 +40,7 @@
 	  <div class="horiz"
 		  @mousedown="handlemousedown($event, 'down', 'height')"
 	    :style="{
+        transform: 'rotate(' + this.$store.state.activeElement.rotate + 'deg)',
 	      width: elm.width / defaultW * 100  + '%',
 	      top: elm.top + elm.height + 'px',
 	      left: elm.left / defaultW * 100  + '%'
@@ -46,12 +50,13 @@
 
     <!-- 右下角 -->
     <div class="rotateBox"
-      @mousedown="handlemouseClick($event, 'right', 'width')"
+      @mousedown="handleRotateDown($event)"
       :style="{
+        transform: 'rotate(' + this.$store.state.activeElement.rotate + 'deg)',
         top: elm.top + elm.height - 10 + 'px',
         left: (elm.left + elm.width) / defaultW * 100 + '%'
       }">
-      <div class="rotate iconfont" @click="handleClick">&#xe657;</div>
+      <div class="rotate iconfont">&#xe657;</div>
     </div>
 	</div>
 </template>
@@ -77,21 +82,31 @@ export default {
   },
 
   methods: {
-    handlemouseClick (e, type, originX, originY) {
-      e.stopPropagation()
-      e.preventDefault()
-      this.type = type
-    },
-
-    handleClick (e) {
+    handleRotate (e) {
       e.stopPropagation()
       e.preventDefault()
       this.$store.commit('rotate', {
         x: e.pageX,
-        y: e.pageY,
-        type: this.type
+        y: e.pageY
       })
       EventBus.$emit('stopCSS' + this.$store.state.uuid)
+    },
+
+    handleRotateup () {
+      document.removeEventListener('mousemove', this.handleRotate, true)
+      document.removeEventListener('mouseup', this.handleRotateup, true)
+      this.$store.commit('stopRotate')
+    },
+
+    handleRotateDown (e, type) {
+      e.stopPropagation()
+      this.type = type
+      this.$store.commit('initmove', {
+        startX: e.pageX,
+        startY: e.pageY
+      })
+      document.addEventListener('mousemove', this.handleRotate, true)
+      document.addEventListener('mouseup', this.handleRotateup, true)
     },
 
     handlemousedown (e, type, originX, originY) {
@@ -103,7 +118,6 @@ export default {
         originX: this.elm[originX],
         originY: this.elm[originY]
       })
-
       document.addEventListener('mousemove', this.handlemousemove, true)
       document.addEventListener('mouseup', this.handlemouseup, true)
     },

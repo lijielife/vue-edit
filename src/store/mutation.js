@@ -11,6 +11,7 @@ export default {
       let widget = state.widgets.find(w => w.uuid === payload.uuid)
       state.activeElement = widget
       state.type = widget.type
+      state.activeElement.animationName = ''
     }
   },
 
@@ -25,6 +26,11 @@ export default {
 
   // 元件移动结束
   stopmove (state) {
+    state.moving = false
+  },
+
+  // 元件移动结束
+  stopRotate (state) {
     state.moving = false
   },
 
@@ -43,13 +49,15 @@ export default {
   // 旋转元件
   rotate (state, payload) {
     var target = state.activeElement
-    target.rotate += 90
-    // console.log(target.rotate)
+    if (payload.x < state.startX || payload.y > state.startY) {
+      target.rotate += 1
+    } else {
+      target.rotate -= 1
+    }
   },
 
   // 调整元件尺寸
   resize (state, payload) {
-    // console.log(111)
     var dx = payload.x - state.startX
     var dy = payload.y - state.startY
     var value

@@ -8,6 +8,7 @@
 import vuePageDesigner from './dashboard.js'
 import store from './store'
 export default {
+  name: 'pageDesiner',
   store,
   data () {
     return {

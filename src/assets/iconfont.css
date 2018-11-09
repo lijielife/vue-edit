@@ -43,3 +43,12 @@
 
 .icon-shunshizhenxuanzhuan:before { content: "\e657"; }
 
+a:focus{
+  box-shadow: none;
+}
+a:hover{
+  color: #000;
+}
+ul,li{
+  list-style: none;
+}

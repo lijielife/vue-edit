@@ -1,6 +1,6 @@
 <template>
   <button
-    class="btn animated"
+    class="animated"
     v-html="val.text"
     :class="[val.playState ? val.animationName : '']"
     contenteditable="true"
@@ -95,8 +95,4 @@ export default {
 </script>
 
 <style scoped>
-.btn{
-  background-repeat: no-repeat;
-  background-size: 100% 100%;
-}
 </style>

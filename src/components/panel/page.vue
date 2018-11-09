@@ -38,8 +38,8 @@
       <div class="panel-value">
         <div class="panel-preview"
           @click="addPic"
-          :style="{ backgroundImage: 'url(' + this.$store.state.page.backgroundImage + ')' }">
-          <icon name="plus" v-show="!this.$store.state.page.backgroundImage" />
+          :style="{ backgroundImage: 'url(' + this.$store.state.page.backPic + ')' }">
+          <icon name="plus" v-show="!this.$store.state.page.backPic" />
         </div>
       </div>
     </div>
@@ -49,8 +49,7 @@
       <div class="panel-label">删除背景图</div>
       <div class="panel-value">
         <div class="panel-preview"
-          @click="deletePic"
-          :style="{ backgroundImage: 'url(' + this.$store.state.page.backgroundImage + ')' }">
+          @click="deletePic">
           <icon name="minus" />
         </div>
       </div>

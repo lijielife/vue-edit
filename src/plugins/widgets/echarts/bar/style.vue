@@ -33,7 +33,7 @@
     <div class="panel-row">
       <icon name="target" />
       <div class="panel-label">背景色</div>
-      <div class="panel-value">{{ activeElement.bgColor }}</div>
+      <!-- <div class="panel-value">{{ activeElement.bgColor }}</div> -->
       <div class="panel-value">
         <input type="color" v-model="activeElement.bgColor">
       </div>
