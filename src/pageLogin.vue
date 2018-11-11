@@ -119,4 +119,15 @@ export default {
   text-align: center;
   margin-top: 10%;
 }
+@media screen and (width: 1366px) {
+  .name_user{
+    margin-top: 1%;
+  }
+  .input_child{
+    margin-top: 4%;
+  }
+  .direct_access{
+    margin-top: 4%;
+  }
+}
 </style>
