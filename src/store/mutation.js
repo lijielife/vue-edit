@@ -22,6 +22,7 @@ export default {
     state.originX = payload.originX
     state.originY = payload.originY
     state.moving = true
+    // console.log(payload)
   },
 
   // 元件移动结束
@@ -36,20 +37,23 @@ export default {
 
   // 移动元件
   move (state, payload) {
-    var target = state.activeElement
+    var target = state.activeElement.common
     var dx = payload.x - state.startX
     var dy = payload.y - state.startY
     var left = state.originX + Math.floor(dx * 100 / state.zoom)
     var top = state.originY + Math.floor(dy * 100 / state.zoom)
 
-    target.left = left > 0 ? left : 0
-    target.top = top > 0 ? top : 0
+    target.position.left = left > 0 ? left : 0
+    target.position.top = top > 0 ? top : 0
   },
 
   // 旋转元件
   rotate (state, payload) {
-    var target = state.activeElement
-    if (payload.x < state.startX || payload.y > state.startY) {
+    var target = state.activeElement.common
+    var dx = payload.x - state.startX
+    // var dy = payload.y - state.startY
+    // 鼠标按下去的x轴坐标位置减去鼠标左右移动的x值正负来确定旋转角度的加减
+    if (dx < 0) {
       target.rotate += 1
     } else {
       target.rotate -= 1
@@ -61,32 +65,33 @@ export default {
     var dx = payload.x - state.startX
     var dy = payload.y - state.startY
     var value
+    var target = state.activeElement.common
 
     if (payload.type === 'right') {
       value = state.originX + Math.floor(dx * 100 / state.zoom)
-      state.activeElement.width = value > 10 ? value : 10
+      target.size.width = value > 10 ? value : 10
       return
     }
 
     if (payload.type === 'down') {
       value = state.originX + Math.floor(dy * 100 / state.zoom)
-      state.activeElement.height = value > 10 ? value : 10
+      target.size.height = value > 10 ? value : 10
       return
     }
 
     if (payload.type === 'left') {
       var left = state.originX + Math.floor(dx * 100 / state.zoom)
       var width = state.originY - Math.floor(dx * 100 / state.zoom)
-      state.activeElement.left = left > 0 ? left : 0
-      state.activeElement.width = width > 10 ? width : 10
+      target.position.left = left > 0 ? left : 0
+      target.size.width = width > 10 ? width : 10
       return
     }
 
     if (payload.type === 'up') {
       var top = state.originX + Math.floor(dy * 100 / state.zoom)
       var height = state.originY - Math.floor(dy * 100 / state.zoom)
-      state.activeElement.top = top > 0 ? top : 0
-      state.activeElement.height = height > 10 ? height : 10
+      target.position.top = top > 0 ? top : 0
+      target.size.height = height > 10 ? height : 10
     }
   },
 
@@ -152,12 +157,17 @@ export default {
     }
 
     // 删除元件
-    state.widgets.splice(state.index, 1)
-
-    // 重置 activeElement
-    state.activeElement = state.page
-    // state.type = 'page'
-    state.uuid = -1
+    // console.log(state.activeElement.uuid)
+    if (state.widgets.length !== 0) {
+      for (var k = 0; k < state.widgets.length; k++) {
+        if (state.widgets[k].uuid === state.activeElement.uuid) {
+          state.widgets.splice(k, 1)
+          state.activeElement = state.page
+          // state.type = 'page'
+          state.uuid = -1
+        }
+      }
+    }
   },
 
   // 添加组件
@@ -195,16 +205,16 @@ export default {
 
   // 添加容器背景图
   addContainerBackPic (state, payload) {
-    state.activeElement.backPic = payload[0].url
-    state.activeElement.backPicUrl = payload[0].src
+    state.activeElement.common.backPic = payload[0].url
+    state.activeElement.common.backPicUrl = payload[0].src
     // state.activeElement.width = payload[0].width
     // state.activeElement.height = payload[0].height
   },
 
   // 添加背景图
   addBackPic (state, payload) {
-    state.activeElement.backPic = payload[0].url
-    state.activeElement.backPicUrl = payload[0].src
+    state.activeElement.common.backPic = payload[0].url
+    state.activeElement.common.backPicUrl = payload[0].src
   },
 
   // 添加动画
@@ -247,7 +257,21 @@ export default {
   updateData (state, {uuid, key, value}) {
     let widget = state.widgets.find(w => w.uuid === uuid)
     if (undefined !== widget) {
-      widget[key] = value
+      if (key.indexOf('.') !== -1) {
+        let keyary = key.split('.')
+        let config = widget
+        let keylength = keyary.length
+        for (let i = 0; i < keylength; i++) {
+          let attr = keyary[i]
+          if (i === keylength - 1) {
+            config[attr] = value
+          } else {
+            config = config[attr]
+          }
+        }
+      } else {
+        widget[key] = value
+      }
     }
   }
 }

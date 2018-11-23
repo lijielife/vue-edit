@@ -6,6 +6,26 @@
     <title>dashboards</title>
     <style>
     	body{overflow: hidden;}
+      ul,li{list-style: none;}
+      /* 修改自定义弹窗的默认样式 modal的样式要放到最外面，否则在组件中样式是给不到的 */
+      .ivu-modal{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        top: inherit !important;
+        height: 100%;
+      }
+      .ivu-modal-content{
+        width: 100%;
+      }
+      .ivu-input{
+        height: 2rem !important;
+        margin-top: 1rem;
+      }
+      .ivu-input:focus{
+        border-color: #3780FC !important;
+        box-shadow: none !important;
+      }
     </style>
   </head>
   <body>

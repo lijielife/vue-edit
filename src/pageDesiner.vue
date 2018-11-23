@@ -7,6 +7,7 @@
 <script>
 import vuePageDesigner from './dashboard.js'
 import store from './store'
+// import EventBus from '../src/utils/EventBus.js'
 export default {
   name: 'pageDesiner',
   store,
@@ -27,6 +28,12 @@ export default {
   },
 
   mounted () {
+    // 浏览器后退事件
+    if (window.history && window.history.pushState) {
+      history.pushState(null, null, document.URL)
+      window.addEventListener('popstate', this._broswerBack, false)
+    }
+    this.handleRefreshPage()
     // 获取cookie下面的动画存储数据
     // if (this.getCookie('vpd-data-cookie')) {
     //   let Animation = JSON.parse(this.getCookie('vpd-data-cookie')).animation
@@ -36,7 +43,50 @@ export default {
     // }
   },
 
+  destroyed () {
+    this.handleRefreshPage()
+    window.removeEventListener('popstate', this._broswerBack, false)
+  },
+
   methods: {
+    // 网页关闭、刷新提示
+    handleRefreshPage () {
+      // console.log(this.$route.fullPath, this.$store.state.widgets.length, 333)
+      if (this.$route.fullPath === '/pagedesiner') {
+        window.onbeforeunload = (e) => {
+          e = e || window.event
+          if (e) {
+            e.returnValue = '关闭提示' // 浏览器默认样式修改不掉
+          }
+          return '关闭提示'
+        }
+      } else {
+        window.onbeforeunload = null
+      }
+    },
+    _broswerBack () {
+      if (this.$store.state.widgets.length === 0) {
+        this.$router.push({
+          name: 'SelectTemp'
+        })
+      } else {
+        this.$Modal.confirm({
+          title: '返回上一页',
+          content: '返回上一页之前是否保存数据？',
+          onOk: () => {
+            this.$store.state.widgets = []
+            this.$store.dispatch('save')
+            this.$Message.info('数据保存，后退成功！')
+            this.$router.push({
+              name: 'SelectTemp'
+            })
+          },
+          onCancel: () => {
+            this.$Message.info('取消后退!')
+          }
+        })
+      }
+    },
     handleSave (data) {
       console.log('saving:', data)
       window.localStorage.setItem('vpd-data', JSON.stringify(data))
@@ -75,7 +125,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 #app {
   height: 100%;
 }

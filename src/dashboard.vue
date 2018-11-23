@@ -104,7 +104,7 @@ export default {
   box-sizing: content-box;
   &.column {
     flex: none;
-    width: 200px;
+    width: 160px;
   }
 }
 .viewport {
@@ -116,7 +116,7 @@ export default {
   user-select: none;
   &.column {
     flex: none;
-    width: 400px;
+    width: 350px;
   }
 }
 .zoom-wrap {

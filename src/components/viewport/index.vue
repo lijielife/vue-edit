@@ -9,11 +9,11 @@
         width: width + 'px',
         transform: 'scale(' + zoom / 100 + ')'
       }">
-
+      
       <!-- 组件 -->
       <component
-        :is="val.type"
-        :data-title="val.type"
+        :is="val.common.type"
+        :data-title="val.common.type"
         class="layer"
         :class="{'g-active': id === val.uuid}"
         v-for="val in widgetStore"
@@ -23,14 +23,14 @@
         :w="width"
         :defaultWidthRate="defaultWidthRate"
         :defaultHeightRate="defaultHeightRate"
-        :data-type="val.type"
+        :data-type="val.common.type"
         :data-uuid="val.uuid"
-        :id="val.type+val.uuid"
+        :id="val.common.type+val.uuid"
         :playState="playState">
         <component
-          v-if="val.isContainer"
-          :is="child.type"
-          :data-title="child.type"
+          v-if="val.common.isContainer"
+          :is="child.common.type"
+          :data-title="child.common.type"
           class="layer layer-child"
           :class="{'g-active': id === child.uuid}"
           v-for="child in getChilds(val.name)"
@@ -40,15 +40,15 @@
           :w="width"
           :defaultWidthRate="defaultWidthRate"
           :defaultHeightRate="defaultHeightRate"
-          :data-type="child.type"
+          :data-type="child.common.type"
           :data-uuid="child.uuid"
-          :id="child.type+child.uuid"
+          :id="child.common.type+child.uuid"
           :playState="playState" />
       </component>
 
       <!-- 参考线 -->
       <ref></ref>
-
+      
       <!-- 尺寸控制器 -->
       <control></control>
     </div>
@@ -89,26 +89,26 @@ export default {
         var target = this.$store.state.activeElement
 
         // 左
-        if (e.keyCode === 37 && target.left) {
-          target.left -= 1
+        if (e.keyCode === 37 && target.common.position.left) {
+          target.common.position.left -= 1
           return
         }
         // 上
-        if (e.keyCode === 38 && target.top) {
+        if (e.keyCode === 38 && target.common.position.top) {
           e.preventDefault()
-          target.top -= 1
+          target.common.position.top -= 1
           return
         }
         // 右
-        if (e.keyCode === 39 && target.left) {
-          target.left += 1
+        if (e.keyCode === 39 && target.common.position.left) {
+          target.common.position.left += 1
           return
         }
 
         // 下
-        if (e.keyCode === 40 && target.top) {
+        if (e.keyCode === 40 && target.common.position.top) {
           e.preventDefault()
-          target.top += 1
+          target.common.position.top += 1
         }
       },
       true
@@ -119,18 +119,24 @@ export default {
     handleSelection (e) {
       var target = e.target
       var type = target.getAttribute('data-type')
-
-      if (type) {
-        var uuid = target.getAttribute('data-uuid')
-
+      var uuid = '-1'
+      if (type === null && target.tagName === 'CANVAS') {
+        // 选中图表组件，只能激活本组件的选中状态
+        let targetParent = target.parentElement.parentElement
+        type = targetParent.getAttribute('data-type')
+        uuid = targetParent.getAttribute('data-uuid')
+        this.$store.commit('select', {
+          uuid: uuid || -1
+        })
+      } else if (type) {
+        uuid = target.getAttribute('data-uuid')
         // 设置选中元素
         this.$store.commit('select', {
           uuid: uuid || -1
         })
-
         // 绑定移动事件：只有从属于 page 的，除背景图以外的元件才能移动
         target = this.$store.state.activeElement
-        if (target.belong === 'page' && target.dragable) {
+        if (target.common.belong === 'page' && target.common.dragable) {
           this.initmovement(e) // 参见 mixins
         }
       } else {
@@ -162,7 +168,7 @@ export default {
   computed: {
     // 已添加的组件
     widgetStore () {
-      return this.$store.state.widgets.filter(item => item.belong === 'page')
+      return this.$store.state.widgets.filter(item => item.common.belong === 'page')
     },
 
     // 画布高度

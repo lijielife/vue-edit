@@ -5,7 +5,6 @@ export default {
   index: -1,              // 选中元素索引
   uuid: null,             // 选中元素uuid
   counter: 0,             // 容器副本命名时避免重名所用的计数器
-  backgroundImage: '',     // 画布背景图
 
   originX: 0,             // 选中元件的横向初始值
   originY: 0,             // 选中元件的纵向初始值
@@ -56,11 +55,12 @@ export default {
   defaultWidthRate: 1,   // 页面缩放宽度比例（发布页面时使用，默认为1）
   defaultHeightRate: 1,  // 页面缩放高度比例（发布页面时使用，默认为1）
 
-  activeElement: {},      // 选中对象，要么是元件，要么是页面
+  activeElement: {
+  },      // 选中对象，要么是元件，要么是页面
   page: {
     page: true,
     title: '测试页面',    // 页面 title
-    height: 1500,         // 画布高度
+    height: 600,         // 画布高度
     width: 1000,          // 画布宽度
     endTime: new Date(),   // 截止日期
     backgroundColor: '#ffffff',
@@ -68,5 +68,6 @@ export default {
     backPic: '',
     backPicUrl: ''
   },
-  widgets: []            // 元件
+  widgets: [],            // 元件
+  chartThemes: []
 }

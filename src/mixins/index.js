@@ -7,8 +7,8 @@ var move = {
       this.$store.commit('initmove', {
         startX: e.pageX,
         startY: e.pageY,
-        originX: target.left,
-        originY: target.top
+        originX: target.common.position.left,
+        originY: target.common.position.top
       })
 
       // 绑定鼠标移动事件

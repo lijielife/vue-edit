@@ -35,16 +35,16 @@ export default {
 
       state.widgets.forEach(item => {
         // 排除选中元素
-        if (item.hasGuide && item.uuid === uuid) return
+        if (item.common.hasGuide && item.uuid === uuid) return
         // 排除容器中的元件
-        if (item.hasGuide && item.belong !== 'page') return
+        if (item.common.hasGuide && item.common.belong !== 'page') return
 
         guides.push({
           uuid: item.uuid,
-          width: item.width,
-          height: item.height,
-          top: item.top,
-          left: item.left
+          width: item.common.size.width,
+          height: item.common.size.height,
+          top: item.common.position.top,
+          left: item.common.position.left
         })
       })
 
@@ -86,7 +86,6 @@ export default {
     verti () {
       var guides = this.guides
       var cor = [375]
-
       guides.forEach(val => {
         var left = val.left
         var right = left + val.width
@@ -111,9 +110,9 @@ export default {
     // 移动元素上下边坐标
     horizontal () {
       var a = this.$store.state.activeElement
-      if (a) {
-        var h = Math.round(a.height)
-        return [a.top, a.top + h]
+      if (a && a.common) {
+        var h = Math.round(a.common.size.height)
+        return [a.common.position.top, a.common.position.top + h]
       } else {
         return []
       }
@@ -122,9 +121,9 @@ export default {
     // 移动元素左中右坐标
     vertical () {
       var a = this.$store.state.activeElement
-      if (a) {
-        var w = Math.round(a.width / 2)
-        return [a.left, a.left + w, a.left + w * 2]
+      if (a && a.common) {
+        var w = Math.round(a.common.size.width / 2)
+        return [a.common.position.left, a.common.position.left + w, a.common.position.left + w * 2]
       } else {
         return []
       }

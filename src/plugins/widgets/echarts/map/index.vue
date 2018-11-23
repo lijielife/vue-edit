@@ -27,13 +27,14 @@
 import braidMapStyle from './style.vue'
 import { changeResize, changeObjResize } from '../../../../utils/offset'
 import EventBus from '../../../../utils/EventBus.js'
+import imgUrl from './map.png'
 // 引入 ECharts 主模块
 var echarts = require('echarts/lib/echarts')
 // 引入类型图
 require('echarts/map/js/china.js')
 
 const WIDGET_NAME = 'chart-map'
-
+const WIDGET_TITLE = '分级色彩地图'
 var id
 var myChartMap
 
@@ -41,7 +42,9 @@ export default {
   name: WIDGET_NAME,
   icon:
     '<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 1000 1000" enable-background="new 0 0 1000 1000" xml:space="preserve"><metadata> Svg Vector Icons : http://www.sfont.cn </metadata><g><path d="M11,438.7c-24.8,3.9,428.4,122.4,428.4,122.4l183.6,428.3L990,10.5C990,10.5,35.9,435,11,438.7zM622.6,794.3L499.6,500.9l-275.5-71.8l647.4-290.2C863.4,160.5,622.6,794.3,622.6,794.3z"/></g></svg>',
-  title: '地图',
+  title: WIDGET_TITLE,
+  thumbnail: imgUrl,
+  category: 'map',
   panel: braidMapStyle,
   computed: {
     ctop () {
@@ -77,6 +80,8 @@ export default {
   },
   setting: {
     type: WIDGET_NAME,
+    title: WIDGET_TITLE,
+    thumbnail: imgUrl,
     isContainer: false,
     isUpload: false,
     hasGuide: true,

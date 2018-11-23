@@ -1,32 +1,104 @@
-{
-  "content": [
-    {
-      "name": "Mon",
-      "value": "100"
-    },
-    {
-      "name": "Tue",
-      "value": "30"
-    },
-    {
-      "name": "Wed",
-      "value": "80"
-    },
-    {
-      "name": "Thu",
-      "value": "20"
-    },
-    {
-      "name": "Fri",
-      "value": "60"
-    },
-    {
-      "name": "Sat",
-      "value": "40"
-    },
-    {
-      "name": "Sun",
-      "value": "90"
-    }
-  ]
-}
+[
+	{
+		"name": "2017年",
+		"code": "2017",
+    "value": 32322222,
+    "type": "bar",
+		"children": [
+      {
+        "name": "江苏省",
+        "code": "3200000000",
+        "value": 12121,
+        "children": [
+          {
+            "name": "南京市",
+            "code": "32010000",
+            "value": 11111,
+            "children": [
+              {	
+                "name": "玄武区",
+                "code": "32010200",
+                "value": 2322
+              }
+            ]
+          },
+          {
+            "name": "无锡市",
+            "code": "32020000",
+            "value": 22222,
+            "children": [
+              {	
+                "name": "崇安区",
+                "code": "32020200",
+                "value": 2322
+              }
+            ]
+          },
+          {
+            "name": "徐州市",
+            "code": "32030000",
+            "value": 12121,
+            "children": [
+              {	
+                "name": "鼓楼区",
+                "code": "32030200",
+                "value": 2322
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+		"name": "2018年",
+		"code": "2018",
+    "value": 44444,
+    "type": "bar",
+		"children": [
+      {
+        "name": "江苏省",
+        "code": "3200000000",
+        "value": 23232,
+        "children": [
+          {
+            "name": "南京市",
+            "code": "32010000",
+            "value": 12312,
+            "children": [
+              {	
+                "name": "玄武区",
+                "code": "32010200",
+                "value": 2322
+              }
+            ]
+          },
+          {
+            "name": "无锡市",
+            "code": "32020000",
+            "value": 22222,
+            "children": [
+              {	
+                "name": "崇安区",
+                "code": "32020200",
+                "value": 2322
+              }
+            ]
+          },
+          {
+            "name": "徐州市",
+            "code": "32030000",
+            "value": 12121,
+            "children": [
+              {	
+                "name": "鼓楼区",
+                "code": "32030200",
+                "value": 2322
+              }
+            ]
+          }
+        ]
+      }
+    ]
+	}
+]

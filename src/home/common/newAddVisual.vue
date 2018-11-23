@@ -18,24 +18,6 @@ export default {
   methods: {
     handleClick () {
       EventBus.$emit('jumpPage')
-      // this.value = '' // 再次点击时置空value
-      // this.$Modal.confirm({
-      //   render: (h) => {
-      //     return h('Input', {
-      //       props: {
-      //         value: this.value,
-      //         autofocus: true,
-      //         placeholder: '请输入创建组件标题'
-      //       },
-      //       on: {
-      //         input: (val) => {
-      //           this.value = val
-      //           EventBus.$emit('addelement', this.value)
-      //         }
-      //       }
-      //     })
-      //   }
-      // })
     }
   }
 }
@@ -44,7 +26,6 @@ export default {
 <style scoped>
 .newadd{
   width: 100%;
-  max-width: 260px;
   min-height: 260px;
   background: #fff;
   color: #3780FC;
@@ -61,5 +42,21 @@ export default {
   display: block;
   text-align: center;
   font-size: 60px;
+}
+
+@media screen and (width: 1920px){
+  .newadd{
+    min-height: 335px;
+  }
+}
+@media screen and (width: 1680px){
+  .newadd{
+    min-height: 295px;
+  }
+}
+@media screen and (width: 1600px){
+  .newadd{
+    min-height: 295px;
+  }
 }
 </style>

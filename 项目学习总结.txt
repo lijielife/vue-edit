@@ -309,7 +309,19 @@ if(typeof(Storage)!=="undefined"){
 }
 
 
+17、icon font字体图标在chrome浏览器被加粗和锯齿的解决办法
 
+
+在chrome浏览器下被加粗的解决办法
+
+
+有些icon font字体图标可能在制作的过程中出现了半个像素的问题，在浏览器下就被显示称为一个像素，造成了加粗的现象。解决这个问题的办法就是使用-webkit-font-smoothing属性。
+
+CSS代码为：.iconfont{-webkit-font-smoothing: antialiased;}
+
+在chrome浏览器下放大出现锯齿的解决办法
+
+CSS代码为：.iconfont{-webkit-text-stroke-width: 0.2px;}
 
 
 

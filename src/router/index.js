@@ -21,6 +21,7 @@ export default new Router({
       path: '/',
       redirect: { name: 'pageLogin' }
     },
+    // 登录页
     {
       path: '/pagelogin',
       name: 'pageLogin',
@@ -32,16 +33,19 @@ export default new Router({
       component: PageHome,
       redirect: { name: 'MyVisualization' },
       children: [
+        // 我的数据
         {
           path: '/mydatas',
           name: 'MyDatas',
           component: MyDatas
         },
+        // 组件库
         {
           path: '/mylibrarys',
           name: 'MyLibrarys',
           component: Mylibrarys
         },
+        // 我的可视化
         {
           path: '/myvisualization',
           name: 'MyVisualization',
@@ -49,11 +53,13 @@ export default new Router({
         }
       ]
     },
+    // 视图编辑页面
     {
       path: '/pagedesiner',
       name: 'pageDesiner',
       component: pageDesiner
     },
+    // 模板选择页面
     {
       path: '/selecttemp',
       name: 'SelectTemp',

@@ -1,13 +1,14 @@
 <template>
-	<div v-show="elm">
+	<div v-if="elm">
 		<!-- 左 -->
 	  <div class="verti"
 	  	@mousedown="handlemousedown($event, 'left', 'left', 'width')"
 	    :style="{
-        transform: 'rotate(' + this.$store.state.activeElement.rotate + 'deg)',
-	      height: elm.height + 'px',
-	      top: elm.top + 'px',
-	      left: elm.left / defaultW * 100  + '%'
+        transform: 'rotate(' + rotate + 'deg)',
+        'transform-origin': elm.common.size.width / 2 + 'px' + ' ' + elm.common.size.height / 2 + 'px',
+	      height: elm.common.size.height + 'px',
+	      top: elm.common.position.top + 'px',
+	      left: elm.common.position.left / defaultW * 100  + '%'
 	    }">
 	    <div class="square"></div>
 	  </div>
@@ -16,10 +17,11 @@
 	  <div class="verti"
 		  @mousedown="handlemousedown($event, 'right', 'width')"
 	    :style="{
-        transform: 'rotate(' + this.$store.state.activeElement.rotate + 'deg)',
-	      height: elm.height + 'px',
-	      top: elm.top + 'px',
-	      left: (elm.left + elm.width) / defaultW * 100 + '%'
+        transform: 'rotate(' + rotate + 'deg)',
+        'transform-origin': elm.common.size.width * -1 / 2 + 'px' + ' ' + elm.common.size.height / 2 + 'px',
+	      height: elm.common.size.height + 'px',
+	      top: elm.common.position.top + 'px',
+	      left: (elm.common.position.left + elm.common.size.width) / defaultW * 100 + '%'
 	    }">
 	    <div class="square"></div>
 	  </div>
@@ -28,10 +30,11 @@
 	  <div class="horiz"
 		  @mousedown="handlemousedown($event, 'up', 'top', 'height')"
 	    :style="{
-        transform: 'rotate(' + this.$store.state.activeElement.rotate + 'deg)',
-	      width: elm.width / defaultW * 100  + '%',
-	      top: elm.top + 'px',
-	      left: elm.left / defaultW * 100  + '%'
+        transform: 'rotate(' + rotate + 'deg)',
+        'transform-origin': elm.common.size.width / 2 + 'px' + ' ' + elm.common.size.height / 2 + 'px',
+	      width: elm.common.size.width / defaultW * 100  + '%',
+	      top: elm.common.position.top + 'px',
+	      left: elm.common.position.left / defaultW * 100  + '%'
 	    }">
 	    <div class="square"></div>
 	  </div>
@@ -40,10 +43,11 @@
 	  <div class="horiz"
 		  @mousedown="handlemousedown($event, 'down', 'height')"
 	    :style="{
-        transform: 'rotate(' + this.$store.state.activeElement.rotate + 'deg)',
-	      width: elm.width / defaultW * 100  + '%',
-	      top: elm.top + elm.height + 'px',
-	      left: elm.left / defaultW * 100  + '%'
+        transform: 'rotate(' + rotate + 'deg)',
+        'transform-origin': elm.common.size.width / 2 + 'px' + ' ' + elm.common.size.height * -1 / 2 + 'px',
+	      width: elm.common.size.width / defaultW * 100  + '%',
+	      top: elm.common.position.top + elm.common.size.height + 'px',
+	      left: elm.common.position.left / defaultW * 100  + '%'
 	    }">
 	    <div class="square"></div>
 	  </div>
@@ -52,9 +56,10 @@
     <div class="rotateBox"
       @mousedown="handleRotateDown($event)"
       :style="{
-        transform: 'rotate(' + this.$store.state.activeElement.rotate + 'deg)',
-        top: elm.top + elm.height - 10 + 'px',
-        left: (elm.left + elm.width) / defaultW * 100 + '%'
+        transform: 'rotate(' + rotate + 'deg)',
+        'transform-origin': elm.common.size.width * -1 / 2 + 'px' + ' ' + (elm.common.size.height / 2 - 10) * -1 + 'px',
+        top: elm.common.position.top + elm.common.size.height - 10 + 'px',
+        left: (elm.common.position.left + elm.common.size.width) / defaultW * 100 + '%'
       }">
       <div class="rotate iconfont">&#xe657;</div>
     </div>
@@ -67,11 +72,23 @@ export default {
   computed: {
     elm () {
       var target = this.$store.state.activeElement
-      if (!target.resizable || target.belong !== 'page' || target.displayNone === false) return ''
-      return target
+      if (target && target.common) {
+        if (!target.common.resizable || target.common.belong !== 'page' || target.common.displayNone === false) return ''
+        return target
+      } else {
+        return ''
+      }
     },
     defaultW () {
       return this.$store.state.page.width
+    },
+    rotate () {
+      var target = this.$store.state.activeElement
+      if (target && target.common) {
+        return this.$store.state.activeElement.common.rotate
+      } else {
+        return 0
+      }
     }
   },
 
@@ -112,12 +129,16 @@ export default {
     handlemousedown (e, type, originX, originY) {
       e.stopPropagation()
       this.type = type
-      this.$store.commit('initmove', {
+      let config = {
         startX: e.pageX,
         startY: e.pageY,
-        originX: this.elm[originX],
-        originY: this.elm[originY]
-      })
+        originX: this.elm.common.size[originX],
+        originY: this.elm.common.size[originY]
+      }
+      if (type === 'left' || type === 'up') {
+        config.originX = this.elm.common.position[originX]
+      }
+      this.$store.commit('initmove', config)
       document.addEventListener('mousemove', this.handlemousemove, true)
       document.addEventListener('mouseup', this.handlemouseup, true)
     },

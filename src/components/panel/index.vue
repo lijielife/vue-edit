@@ -1,16 +1,16 @@
 <template>
   <div class="rightDiv" :class="this.flag === false ? '' : 'ChangeWidth'">
     <div class="btnDiv iconfont" @click="handleClick">&#xe655;</div>
-    <ul class="tab tab-block panel-tab">
+    <ul class="tab tab-block panel-tab" v-if="activeElement.common">
       <li class="tab-item" :class="{active: activeTab === 1}" @click="activeTab = 1"><a>参数</a></li>
       <li class="tab-item" :class="{active: activeTab === 2}" @click="activeTab = 2"><a>交互</a></li>
       <li class="tab-item" :class="{active: activeTab === 3}" @click="activeTab = 3"><a>动画</a></li>
     </ul>
 
-    <page :activeElement="activeElement" :tab="activeTab"></page>
-    <appearance :activeElement="activeElement" :tab="activeTab"></appearance>
-    <event :activeElement="activeElement" :tab="activeTab"></event>
-    <animation :activeElement="activeElement" :tab="activeTab"></animation>
+    <page :activeElement="activeElement" :tab="activeTabPanel"></page>
+    <appearance :activeElement="activeElement" :tab="activeTabPanel"></appearance>
+    <event :activeElement="activeElement" :tab="activeTabPanel"></event>
+    <animation :activeElement="activeElement" :tab="activeTabPanel"></animation>
   </div>
 </template>
 
@@ -40,6 +40,12 @@ export default {
     // 选中元素对象
     activeElement () {
       return this.$store.state.activeElement
+    },
+    activeTabPanel () {
+      if (this.activeElement.page) {
+        this.activeTab = 1
+      }
+      return this.activeTab
     }
   },
   methods: {

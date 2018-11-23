@@ -192,7 +192,7 @@ export default {
     play () {
       // stop animation if any
       // this.$store.commit('setAnimation', false)
-      this.activeElement.playState = false
+      this.activeElement.animation.playState = false
       setTimeout(() => {
         var animations = this.$store.state.animation
         if (animations.length === 0) return
@@ -223,7 +223,7 @@ export default {
         // })
 
         // this.$store.commit('setAnimation', true)
-        this.activeElement.playState = true
+        this.activeElement.animation.playState = true
       }, 200)
     }
   },
@@ -231,20 +231,21 @@ export default {
   watch: {
     currentName: function (val) {
       // 设置选中元件的动画名称
-      if (this.activeElement.animationName !== undefined) {
-        this.activeElement.animationName = val
+      if (this.activeElement.animation.animationName !== undefined) {
+        this.activeElement.animation.animationName = val
         this.play()
       }
-      this.getCurrentAnimation(val)
-    },
-
-    activeElement: function (val) {
-      if (val.animationName !== undefined) {
-        this.currentName = val.animationName
-      } else {
-        this.currentName = ''
-      }
+      // this.getCurrentAnimation(val)
     }
+
+    // activeElement: function (val) {
+    //   console.log(val.animation.animationName, 2222)
+    //   if (val.animation.animationName !== undefined) {
+    //     this.currentName = val.animation.animationName
+    //   } else {
+    //     this.currentName = ''
+    //   }
+    // }
   }
 
 }

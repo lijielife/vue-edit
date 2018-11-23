@@ -1,38 +1,26 @@
 <template>
   <div class="menu-bar">
-    <details open>
-      <summary><icon name="list" />可用组件</summary>
-      <ul class="widget-list columns" @mousedown="updateSrollTop">
-        <li class="menu-item column col-6" @click="(e) => {addWidget(e, item)}" v-for="item in widgets" :key="item.name">
-          <icon :svg="item.icon" :title="item.title" />
-          <span class="menu-caption">{{item.title}}</span>
-        </li>
-      </ul>
-    </details>
-    <details>
-      <summary><icon name="layers" />已加组件</summary>
-      <ul class="layer-list">
-        <li :class="{'layer-active': layer === activeElement}" v-for="layer in layers" :key="layer.uuid" @click="(e) => {activeLayer(e, layer)}">{{getWidgetTitle(layer.type)}}</li>
-      </ul>
-    </details>
+      <summary>组件</summary>
+      <!-- 添加组件增多的时候显示滚动条 -->
+      <div class="sideCols" :style="{overflow: 'auto'}">
+        <ul class="layer-list">
+          <li :class="{'layer-active': layer === activeElement}" v-for="layer in layers" :key="layer.uuid" @click="(e) => {activeLayer(e, layer)}">
+            <img :src="layer.common.thumbnail"/><span>{{layer.common.title}}</span>
+          </li>
+        </ul>
+      </div>
   </div>
 </template>
 
 <script>
-import widget from '../plugins/widget'
-import { move } from '../mixins'
 import { cumulativeOffset, checkInView } from '../utils/offset'
 
 export default {
-  mixins: [move],
   props: ['zoom'],
   data () {
     return {}
   },
   computed: {
-    widgets () {
-      return widget.getWidgets()
-    },
     layers () {
       return this.$store.state.widgets
     },
@@ -41,17 +29,6 @@ export default {
     }
   },
   methods: {
-    // 添加组件
-    addWidget (e, item) {
-      this.$store.dispatch('addWidget', item)
-    },
-
-    // 为确保添加的元件出现在可视区内，用画布向上滚动距离作为元件初始 top 值
-    updateSrollTop () {
-      var top = document.getElementById('viewport').scrollTop / this.zoom * 100
-      this.$store.commit('updateSrollTop', top)
-    },
-
     activeLayer (e, item) {
       this.$store.commit('select', {
         uuid: item.uuid
@@ -59,12 +36,8 @@ export default {
       let viewport = document.querySelector('#viewport')
       let target = viewport.querySelector(`[data-uuid='${item.uuid}']`)
       if (target && !checkInView(target)) {
-        viewport.scrollTop = (cumulativeOffset(target).top - 50) * this.zoom / 100
+        viewport.scrollTop = (cumulativeOffset(target).common.position.top - 50) * this.zoom / 100
       }
-    },
-
-    getWidgetTitle (type) {
-      return this.widgets[type].title || ''
     }
   }
 }
@@ -82,10 +55,10 @@ export default {
   }
   summary {
     padding: 5px 0;
+    font-size: 20px;
+    letter-spacing: 5px;
+    text-align: center;
     border-bottom: 1px solid #f5f5f5;
-    .svg-icon {
-      margin-right: 5px;
-    }
   }
 }
 .widget-list {
@@ -110,23 +83,56 @@ export default {
   }
 }
 .layer-list {
-  padding: 10px;
+  padding: 3px;
   li {
     text-align: left;
     cursor: pointer;
     white-space: nowrap;
-    line-height: 24px;
-    padding-left: 5px;
+    padding: 5px 0px 0px 2px;
     &:hover {
       background: #f5f5f5;
-    }
-    &::before {
-      content: '› ';
     }
     &.layer-active {
       color: $light-color;
       background: $primary-color;
     }
+    img {
+      height: 25px;
+    }
+    span {
+      display: -moz-inline-box;
+      display: inline-block;
+      height: 25px;
+      line-height: 25px;
+      overflow: hidden;
+      padding-left: 5px;
+      font-size: 10px;
+      width: 64px;
+      text-overflow: ellipsis; 
+      -o-text-overflow: ellipsis;
+      white-space:nowrap;
+    }
+  }
+}
+.sideCols{
+  height: 89.5vh;
+}
+.sideCols ul{
+  padding-bottom: 15px;
+}
+@media screen and (min-width: 1440px) and (max-width: 1679px) {
+  .sideCols{
+    height: 87.5vh;
+  }
+}
+@media screen and (min-width: 1151px) and (max-width: 1280px)  {
+  .sideCols{
+    height: 86vh;
+  }
+}
+@media screen and (min-width: 1024px) and (max-width: 1150px)  {
+  .sideCols{
+    height: 84.5vh;
   }
 }
 </style>
